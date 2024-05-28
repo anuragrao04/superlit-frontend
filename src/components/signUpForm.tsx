@@ -14,6 +14,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alertDialog"
+import { BackgroundGradient } from "./ui/backgroundGradient"
 
 
 export default function SignUpForm() {
@@ -104,119 +105,122 @@ export default function SignUpForm() {
 
 
   return (
-    <div className="mx-auto max-w-lg space-y-6 py-12 dark:bg-gray-800 dark:text-gray-50">
-      <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold">Welcome to Superlit <img src="rocket.png" width="30" className="inline"></img></h1>
-        <p className="text-gray-500 dark:text-gray-400">Create your account to get started.</p>
-      </div>
-      <Card className="dark:bg-gray-850 dark:text-gray-50 mx-5 py-2">
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+    <div>
+      <BackgroundGradient className="mx-auto max-w-lg space-y-6 py-12 dark:bg-gray-800 dark:text-gray-50 rounded-[22px]">
+        <div className="space-y-2 text-center">
+          <h1 className="text-3xl font-bold">Welcome to Superlit <img src="rocket.png" width="30" className="inline"></img></h1>
+          <p className="text-gray-500 dark:text-gray-400">Create your account to get started.</p>
+        </div>
+        <Card className="dark:bg-gray-850 dark:text-gray-50 mx-5 py-2">
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label className="dark:text-gray-400" htmlFor="university-id">
+                  University ID
+                </Label>
+                <Input
+                  className="dark:bg-gray-800 dark:text-gray-50 dark:placeholder:text-gray-400"
+                  id="university-id"
+                  placeholder="Enter your university ID"
+                  name="universityID"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="dark:text-gray-400" htmlFor="name">
+                  Name
+                </Label>
+                <Input
+                  className="dark:bg-gray-800 dark:text-gray-50 dark:placeholder:text-gray-400"
+                  id="name"
+                  name="name"
+                  onChange={handleChange}
+                  placeholder="Enter your name"
+                  required
+                />
+              </div>
+            </div>
             <div className="space-y-2">
-              <Label className="dark:text-gray-400" htmlFor="university-id">
-                University ID
+              <Label className="dark:text-gray-400" htmlFor="email">
+                Email
               </Label>
               <Input
                 className="dark:bg-gray-800 dark:text-gray-50 dark:placeholder:text-gray-400"
-                id="university-id"
-                placeholder="Enter your university ID"
-                name="universityID"
+                id="email"
+                placeholder="Enter your email"
+                name="email"
                 onChange={handleChange}
                 required
+                type="email"
+                ref={emailRef}
               />
             </div>
             <div className="space-y-2">
-              <Label className="dark:text-gray-400" htmlFor="name">
-                Name
+              <Label className="dark:text-gray-400" htmlFor="password">
+                Password
               </Label>
               <Input
                 className="dark:bg-gray-800 dark:text-gray-50 dark:placeholder:text-gray-400"
-                id="name"
-                name="name"
+                id="password"
+                placeholder="Enter your password"
+                name="password"
                 onChange={handleChange}
-                placeholder="Enter your name"
                 required
+                type="password"
               />
             </div>
-          </div>
-          <div className="space-y-2">
-            <Label className="dark:text-gray-400" htmlFor="email">
-              Email
-            </Label>
-            <Input
-              className="dark:bg-gray-800 dark:text-gray-50 dark:placeholder:text-gray-400"
-              id="email"
-              placeholder="Enter your email"
-              name="email"
-              onChange={handleChange}
-              required
-              type="email"
-              ref={emailRef}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label className="dark:text-gray-400" htmlFor="password">
-              Password
-            </Label>
-            <Input
-              className="dark:bg-gray-800 dark:text-gray-50 dark:placeholder:text-gray-400"
-              id="password"
-              placeholder="Enter your password"
-              name="password"
-              onChange={handleChange}
-              required
-              type="password"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label className="dark:text-gray-400" htmlFor="repeat-password">
-              Repeat Password
-            </Label>
-            <Input
-              className="dark:bg-gray-800 dark:text-gray-50 dark:placeholder:text-gray-400"
-              id="repeat-password"
-              placeholder="Repeat your password"
-              name="repeatPassword"
-              onChange={handleChange}
-              required
-              type="password"
-            />
-          </div>
-          <div className="flex items-center space-x-2">
-            <input type="checkbox" className="dark:bg-gray-50 dark:border-gray-400 dark:checked:bg-gray-50 dark:checked:border-gray-400" id="is-teacher" name="isTeacher" onChange={handleChange} />
-            <Label className="dark:text-gray-400" htmlFor="is-teacher">
-              I am a teacher
-            </Label>
-          </div>
-        </CardContent>
-        <CardFooter>
-          <Button className="w-full dark:bg-gray-800 dark:text-gray-50 dark:hover:bg-gray-700" type="submit" onClick={handleSubmit}>
-            Sign Up
-          </Button>
-        </CardFooter>
-      </Card>
+            <div className="space-y-2">
+              <Label className="dark:text-gray-400" htmlFor="repeat-password">
+                Repeat Password
+              </Label>
+              <Input
+                className="dark:bg-gray-800 dark:text-gray-50 dark:placeholder:text-gray-400"
+                id="repeat-password"
+                placeholder="Repeat your password"
+                name="repeatPassword"
+                onChange={handleChange}
+                required
+                type="password"
+              />
+            </div>
+            <div className="flex items-center space-x-2">
+              <input type="checkbox" className="dark:bg-gray-50 dark:border-gray-400 dark:checked:bg-gray-50 dark:checked:border-gray-400" id="is-teacher" name="isTeacher" onChange={handleChange} />
+              <Label className="dark:text-gray-400" htmlFor="is-teacher">
+                I am a teacher
+              </Label>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button className="w-full dark:bg-gray-800 dark:text-gray-50 dark:hover:bg-gray-700" type="submit" onClick={handleSubmit}>
+              Sign Up
+            </Button>
+          </CardFooter>
+        </Card>
 
 
 
-      {/* alert dialog */}
+        {/* alert dialog */}
 
-      <AlertDialog>
-        <AlertDialogTrigger asChild hidden className="h-0 w-0 p-0">
-          <Button variant="outline" id="alertDialogTrigger" ref={dialogRef} className="h-0 w-0 p-0"></Button>
-        </AlertDialogTrigger>
-        {/*we will trigger the above button to show the dialog*/}
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{dialog.title}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {dialog.description}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogAction>OK</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
+        <AlertDialog>
+          <AlertDialogTrigger asChild hidden className="h-0 w-0 p-0">
+            <Button variant="outline" id="alertDialogTrigger" ref={dialogRef} className="h-0 w-0 p-0"></Button>
+          </AlertDialogTrigger>
+          {/*we will trigger the above button to show the dialog*/}
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{dialog.title}</AlertDialogTitle>
+              <AlertDialogDescription>
+                {dialog.description}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction>OK</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </BackgroundGradient>
+    </div >
+
   )
 }
