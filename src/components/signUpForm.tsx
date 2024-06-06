@@ -3,19 +3,7 @@ import { Input } from "@/components/ui/input"
 import { CardContent, CardFooter, Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useState, useRef } from "react"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alertDialog"
-import { BackgroundGradient } from "./ui/backgroundGradient"
-
+import AlertDialogWrapper from "./ui/alertDialogWrapper"
 
 export default function SignUpForm() {
 
@@ -106,7 +94,7 @@ export default function SignUpForm() {
 
   return (
     <div>
-      <BackgroundGradient className="mx-auto max-w-lg space-y-6 py-12 dark:bg-gray-800 dark:text-gray-50 rounded-[22px]">
+      <div className="mx-auto max-w-lg space-y-6 py-12 dark:bg-gray-800 dark:text-gray-50 rounded-md">
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold">Welcome to Superlit <img src="rocket.png" width="30" className="inline"></img></h1>
           <p className="text-gray-500 dark:text-gray-400">Create your account to get started.</p>
@@ -201,25 +189,8 @@ export default function SignUpForm() {
 
 
         {/* alert dialog */}
-
-        <AlertDialog>
-          <AlertDialogTrigger asChild hidden className="h-0 w-0 p-0">
-            <Button variant="outline" id="alertDialogTrigger" ref={dialogRef} className="h-0 w-0 p-0"></Button>
-          </AlertDialogTrigger>
-          {/*we will trigger the above button to show the dialog*/}
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>{dialog.title}</AlertDialogTitle>
-              <AlertDialogDescription>
-                {dialog.description}
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogAction>OK</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      </BackgroundGradient>
+        <AlertDialogWrapper dialog={dialog} dialogRef={dialogRef} />
+      </div>
     </div >
 
   )

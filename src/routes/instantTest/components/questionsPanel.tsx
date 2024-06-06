@@ -1,0 +1,81 @@
+import CodeBlock from "@/components/ui/codeBlock"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
+} from "@/components/ui/carousel"
+import { Card } from "@/components/ui/card"
+import { useEffect, useState } from "react"
+
+
+
+export default function QuestionsPanel({ testData, currentQuestionIndex, setCurrentQuestionIndex }: { testData: any, currentQuestionIndex: any, setCurrentQuestionIndex: any }) {
+  const [api, setApi] = useState<CarouselApi>()
+  console.log(testData)
+  useEffect(() => {
+    if (!api) {
+      return
+    }
+
+    setCurrentQuestionIndex(api.selectedScrollSnap())
+
+    api.on("select", () => {
+      setCurrentQuestionIndex(api.selectedScrollSnap())
+    })
+  }, [api])
+
+  return testData == null ? "Loading..." : (
+    <div className="mx-5">
+      <Carousel setApi={setApi} className="">
+        <div className="grid grid-cols-3 justify-center">
+          <div className="flex justify-center items-center"><CarouselPrevious className="" /></div>
+          <div><div className="text-xl text-center">Question {currentQuestionIndex + 1}</div><div className="text-xl text-center">Of {testData.questions.length}</div></div>
+          <div className="flex justify-center items-center"><CarouselNext className="" /></div>
+        </div>
+        <CarouselContent className="">
+          {testData.questions.map((question: any, index: any) => {
+            return (
+              <CarouselItem key={index}>
+                <div className="w-full">
+                  <div className="text-4xl">
+                    {question.title}
+                  </div>
+                  <div>
+                    {question.question}
+                  </div>
+
+                  <div className="text-3xl my-3">Example Cases</div>
+
+                  {question.exampleCases.map((testCase: any, index: any) => (
+                    <div className="mt-3" key={index}>
+                      <div className="text-2xl">Case {index + 1}</div>
+                      <div>Input</div>
+                      <CodeBlock code={testCase.Input} className="" />
+                      <div>Expected Output</div>
+                      <CodeBlock code={testCase.Input} className="" />
+                      {testCase.explanation != "" ? (
+                        <>
+                          <div>Explanation</div>
+                          <CodeBlock code={testCase.explanation} className=""></CodeBlock>
+                        </>
+                      ) : <></>}
+
+                    </div>
+
+                  ))
+                  }
+
+                </div>
+              </CarouselItem>
+            )
+          })}
+        </CarouselContent>
+
+      </Carousel>
+
+    </div>
+  )
+}
