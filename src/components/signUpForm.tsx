@@ -93,41 +93,39 @@ export default function SignUpForm() {
 
 
   return (
-    <div>
-      <div className="mx-auto max-w-lg space-y-6 py-12 dark:bg-gray-800 dark:text-gray-50 rounded-md">
+    <div className="">
+      <div className="mx-auto max-w-lg space-y-6 py-12 px-7 dark:bg-gray-800 dark:text-gray-50 rounded-md">
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold">Welcome to Superlit <img src="rocket.png" width="30" className="inline"></img></h1>
           <p className="text-gray-500 dark:text-gray-400">Create your account to get started.</p>
         </div>
-        <Card className="dark:bg-gray-850 dark:text-gray-50 mx-5 py-2">
+        <Card className="dark:bg-gray-850 dark:text-gray-50 py-2">
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="dark:text-gray-400" htmlFor="university-id">
-                  University ID
-                </Label>
-                <Input
-                  className="dark:bg-gray-800 dark:text-gray-50 dark:placeholder:text-gray-400"
-                  id="university-id"
-                  placeholder="Enter your university ID"
-                  name="universityID"
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label className="dark:text-gray-400" htmlFor="name">
-                  Name
-                </Label>
-                <Input
-                  className="dark:bg-gray-800 dark:text-gray-50 dark:placeholder:text-gray-400"
-                  id="name"
-                  name="name"
-                  onChange={handleChange}
-                  placeholder="Enter your name"
-                  required
-                />
-              </div>
+            <div className="space-y-2">
+              <Label className="dark:text-gray-400" htmlFor="university-id">
+                University ID
+              </Label>
+              <Input
+                className="dark:bg-gray-800 dark:text-gray-50 dark:placeholder:text-gray-400"
+                id="university-id"
+                placeholder="Enter your university ID"
+                name="universityID"
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="dark:text-gray-400" htmlFor="name">
+                Name
+              </Label>
+              <Input
+                className="dark:bg-gray-800 dark:text-gray-50 dark:placeholder:text-gray-400"
+                id="name"
+                name="name"
+                onChange={handleChange}
+                placeholder="Enter your name"
+                required
+              />
             </div>
             <div className="space-y-2">
               <Label className="dark:text-gray-400" htmlFor="email">

@@ -8,7 +8,7 @@ import "./main.css";
 import InstantTest from "./routes/instantTest/instantTest.tsx";
 import InputPrivateCode from "./routes/instantTest/teacherPanel/inputPrivateCode.tsx";
 import TeacherDashboard from "./routes/instantTest/teacherPanel/slug/teacherDashboard.tsx";
-
+import CreateTest from "./routes/instantTest/createTest/createTest.tsx";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +30,9 @@ const router = createBrowserRouter([
   {
     path: "/instantTest/teacherDashboard/:privateCode",
     element: <TeacherDashboard />
+  }, {
+    path: "/instantTest/createTest",
+    element: <CreateTest />
   },
 
   // 404 path

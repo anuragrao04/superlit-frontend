@@ -11,18 +11,18 @@ import InstantTestCode from "@/components/instantTestCode"
 export default function Root() {
   return (
     <div className="flex justify-center items-start min-h-screen bg-black pt-10">
-      <Tabs defaultValue="instanttest">
+      <Tabs defaultValue="instanttest" className="w-fit">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="signin">Sign In</TabsTrigger>
           <TabsTrigger value="signup">Sign Up</TabsTrigger>
           <TabsTrigger value="instanttest">Instant Test</TabsTrigger>
         </TabsList>
-        <TabsContent value="signin">
+        <TabsContent value="signin" className="w-full">
         </TabsContent>
-        <TabsContent value="signup">
+        <TabsContent value="signup" className="w-full">
           <SignUpForm />
         </TabsContent>
-        <TabsContent value="instanttest">
+        <TabsContent value="instanttest" className="w-full">
           <InstantTestCode />
         </TabsContent>
       </Tabs>

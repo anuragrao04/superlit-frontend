@@ -52,7 +52,7 @@ export default function InstantTest() {
     if (responseJSON.error) {
       setDialog({
         title: "Wrong Test Code",
-        description: "The Test Code Is Incorrect. Please Try Again."
+        description: "The Test Code Is Incorrect Or The Test Is Over. Please Try Again Or Contact Your Teacher."
       })
       dialogRef.current.click()
       return
