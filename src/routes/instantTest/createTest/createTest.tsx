@@ -9,6 +9,8 @@ import AlertDialogWrapper from "@/components/ui/alertDialogWrapper"
 export default function CreateTest() {
   // dialog stuff
   const dialogRef = useRef(null)
+  const formRef = useRef(null)
+  const fileUploadRef = useRef(null)
   const [dialog, setDialog] = useState({
     title: "",
     description: "",
@@ -47,6 +49,7 @@ export default function CreateTest() {
       [name]: value,
     }))
   }
+
   const handleQuestionChange = (index: any, field: any, value: any) => {
     setFormData((prevData) => {
       const updatedQuestions = [...prevData.questions]
@@ -165,17 +168,65 @@ export default function CreateTest() {
     } else {
       setDialog({
         title: "Success",
-        description: "Test created successfully! Share the following test code with your students to take the test: " + responseJSON.publicCode + ".The following is the master code for this test. DO NOT share this: " + responseJSON.privateCode + ".The same credentials have been sent to your email and you can safely close this tab"
+        description: "Test created successfully! Share the following test code with your students to take the test: " + responseJSON.publicCode + ".The following is the master code for this test. DO NOT share this: " + responseJSON.privateCode + ".The same credentials have been sent to your email and you can safely close this tab or download the test data"
       })
       dialogRef.current.click()
     }
 
   }
 
+  const downloadTestData = async () => {
+
+    // validate the form:
+    if (!formRef.current.reportValidity()) {
+      return
+    }
+
+    const blob = new Blob([JSON.stringify(formData)], { type: 'application/json' });
+
+    // Create an anchor element and trigger a download
+    const a = document.createElement('a');
+    a.download = 'test.json'; // Name of the downloaded file
+    a.href = window.URL.createObjectURL(blob);
+    const clickEvt = new MouseEvent('click', {
+      view: window,
+      bubbles: true,
+      cancelable: true,
+    });
+    a.dispatchEvent(clickEvt);
+    a.remove();
+
+  }
+
+  const handleFileUpload = (e: any) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        console.log(e.target.result)
+        const fileData = JSON.parse(e.target.result);
+        setFormData(fileData);
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+      }
+    };
+    reader.readAsText(file);
+  }
+
   return (
     <div className="max-w-2xl mx-auto p-6 sm:p-8">
-      <h1 className="text-3xl font-bold mb-6">Create Test</h1>
-      <form onSubmit={handleSubmit}>
+      <div className="flex justify-between">
+        <h1 className="text-3xl font-bold mb-6">Create Test</h1>
+        <Button variant="outline" onClick={() => fileUploadRef.current.click()}>
+          <input type="file" accept=".json" onChange={handleFileUpload} className="hidden" ref={fileUploadRef}>
+
+          </input>
+          Upload Test Data
+        </Button>
+      </div>
+      <form onSubmit={handleSubmit} ref={formRef}>
         <div className="mb-6">
           <Label htmlFor="email">Email</Label>
           <Input type="email" id="email" name="email" value={formData.email} onChange={handleInputChange} required />
@@ -319,10 +370,14 @@ export default function CreateTest() {
             </div>
           </div>
         ))}
-        <Button type="button" onClick={addQuestion} className="m-6">
+
+        <Button type="button" onClick={addQuestion} className="">
           Add Question
         </Button>
-        <Button type="submit">Submit</Button>
+        <div className="mt-8 flex flex-col justify-start items-start space-y-3">
+          <Button type="submit">Submit</Button>
+          <Button type="button" variant="secondary" onClick={downloadTestData} className="">Download Test Data</Button>
+        </div>
       </form>
 
       <AlertDialogWrapper dialog={dialog} dialogRef={dialogRef} />
