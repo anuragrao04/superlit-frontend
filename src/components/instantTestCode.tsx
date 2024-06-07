@@ -11,7 +11,7 @@ import { useRef, useState } from "react"
 
 import { useNavigate } from "react-router-dom";
 import AlertDialogWrapper from "./ui/alertDialogWrapper"
-
+import InstantTestCodeTeacherLinks from "./instantTestCodeFooter"
 export default function InstantTestCode() {
 
 
@@ -67,6 +67,9 @@ export default function InstantTestCode() {
               Begin Test
             </Button>
           </CardFooter>
+
+          <InstantTestCodeTeacherLinks />
+
         </Card>
       </div>
 

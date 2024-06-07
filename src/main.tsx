@@ -31,7 +31,7 @@ const router = createBrowserRouter([
     path: "/instantTest/teacherDashboard/:privateCode",
     element: <TeacherDashboard />
   }, {
-    path: "/instantTest/createTest",
+    path: "/instantTest/create",
     element: <CreateTest />
   },
 
