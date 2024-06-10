@@ -277,8 +277,7 @@ export default function CreateTest() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor={`example-input-${index}-${exampleIndex}`}>Input</Label>
-                      <Input
-                        type="text"
+                      <Textarea
                         id={`example-input-${index}-${exampleIndex}`}
                         value={example.input}
                         onChange={(e) => handleExampleCaseChange(index, exampleIndex, "input", e.target.value)}
@@ -287,8 +286,7 @@ export default function CreateTest() {
                     </div>
                     <div>
                       <Label htmlFor={`example-expectedOutput-${index}-${exampleIndex}`}>Expected Output</Label>
-                      <Input
-                        type="text"
+                      <Textarea
                         id={`example-expectedOutput-${index}-${exampleIndex}`}
                         value={example.expectedOutput}
                         onChange={(e) => handleExampleCaseChange(index, exampleIndex, "expectedOutput", e.target.value)}
@@ -331,8 +329,7 @@ export default function CreateTest() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor={`test-input-${index}-${testIndex}`}>Input</Label>
-                      <Input
-                        type="text"
+                      <Textarea
                         id={`test-input-${index}-${testIndex}`}
                         value={testCase.input}
                         onChange={(e) => handleTestCaseChange(index, testIndex, "input", e.target.value)}
@@ -341,8 +338,7 @@ export default function CreateTest() {
                     </div>
                     <div>
                       <Label htmlFor={`test-expectedOutput-${index}-${testIndex}`}>Expected Output</Label>
-                      <Input
-                        type="text"
+                      <Textarea
                         id={`test-expectedOutput-${index}-${testIndex}`}
                         value={testCase.expectedOutput}
                         onChange={(e) => handleTestCaseChange(index, testIndex, "expectedOutput", e.target.value)}
