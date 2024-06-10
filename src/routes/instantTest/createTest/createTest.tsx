@@ -300,7 +300,6 @@ export default function CreateTest() {
                       <Input
                         type="number"
                         id={`example-score-${index}-${exampleIndex}`}
-                        value={example.score}
                         onChange={(e) => handleExampleCaseChange(index, exampleIndex, "score", Number(e.target.value))}
                         required
                       />
@@ -352,7 +351,6 @@ export default function CreateTest() {
                       <Input
                         type="number"
                         id={`test-score-${index}-${testIndex}`}
-                        value={testCase.score}
                         onChange={(e) => handleTestCaseChange(index, testIndex, "score", Number(e.target.value))}
                         required
                       />
