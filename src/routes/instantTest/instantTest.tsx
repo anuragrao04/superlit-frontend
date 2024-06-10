@@ -27,10 +27,7 @@ export default function InstantTest() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [editorData, setEditorData] = useState([])
   const dialogRef = useRef(null)
-
   const [dialog, setDialog] = useState({
-    title: "",
-    description: "",
   })
 
   const navigate = useNavigate()
@@ -52,7 +49,8 @@ export default function InstantTest() {
     if (responseJSON.error) {
       setDialog({
         title: "Wrong Test Code",
-        description: "The Test Code Is Incorrect Or The Test Is Over. Please Try Again Or Contact Your Teacher."
+        description: "The Test Code Is Incorrect Or The Test Is Over. Please Try Again Or Contact Your Teacher.",
+        onOk: () => navigate("/")
       })
       dialogRef.current.click()
       return
@@ -74,12 +72,49 @@ export default function InstantTest() {
     fetchTestData()
   }, [])
 
+  useEffect(() => {
+    const handleBeforeUnload = (event: any) => {
+      event.preventDefault()
+      event.returnValue = ''
+      setDialog({
+        title: "Are You Sure?",
+        description: "You Are About To Leave The Test. Make sure you have hit submit on *every* attempted question. Your answer won't be evaluated if you don't submit. Are you sure you want to leave?",
+        cancelText: "Yes, I want to leave",
+        okText: "Take me back",
+        onCancel: () => navigate("/"),
+        onOk: () => event.preventDefault()
+        // on ok and on cancel are flipped to make the primary button be cancel and stay
+      })
+
+      dialogRef.current.click()
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState == "hidden") {
+        setDialog({
+          title: "No cheating!",
+          description: "You are not allowed to cheat. Please stay on the test page. If you leave, your test will be submitted and you will get 0 points. If you think this is a mistake, please contact your teacher.",
+        })
+        dialogRef.current.click()
+      }
+    }
+
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
 
 
 
 
   return (
     <div>
+
       <ResizablePanelGroup
         direction="horizontal"
         className="min-w-screen min-h-screen rounded-lg border"
@@ -116,7 +151,7 @@ export default function InstantTest() {
 
 
       {/* alert dialog */}
-      <AlertDialogWrapper dialog={dialog} dialogRef={dialogRef} onOk={() => navigate("/")} />
+      <AlertDialogWrapper dialog={dialog} dialogRef={dialogRef} />
 
 
     </div>

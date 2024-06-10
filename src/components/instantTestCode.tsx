@@ -34,6 +34,7 @@ export default function InstantTestCode() {
       dialogRef.current.click()
       return
     }
+    document.body.requestFullscreen()
     navigate(`/instantTest/${universityID}/${testCode}`)
   }
 
