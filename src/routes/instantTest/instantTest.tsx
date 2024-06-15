@@ -34,6 +34,7 @@ export default function InstantTest() {
 
 
   async function fetchTestData() {
+    console.log("Fetching test data")
     const response = await fetch("/api/instanttest/get", {
       method: "POST",
       headers: {
@@ -43,6 +44,7 @@ export default function InstantTest() {
         publicCode
       }),
     })
+    console.log("Fetch over")
 
     const responseJSON = await response.json()
 

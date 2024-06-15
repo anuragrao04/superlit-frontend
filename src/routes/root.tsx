@@ -1,4 +1,5 @@
 import SignUpForm from "@/components/signUpForm";
+import SignInForm from "@/components/signInForm"
 import {
   Tabs,
   TabsContent,
@@ -18,6 +19,7 @@ export default function Root() {
           <TabsTrigger value="instanttest">Instant Test</TabsTrigger>
         </TabsList>
         <TabsContent value="signin" className="w-full">
+          <SignInForm />
         </TabsContent>
         <TabsContent value="signup" className="w-full">
           <SignUpForm />

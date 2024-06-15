@@ -1,4 +1,4 @@
-import { useState, useRef } from "react"
+import { useState, useRef, Ref } from "react"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -8,7 +8,7 @@ import AlertDialogWrapper from "@/components/ui/alertDialogWrapper"
 
 export default function CreateTest() {
   // dialog stuff
-  const dialogRef = useRef(null)
+  const dialogRef: Ref = useRef(null)
   const formRef = useRef(null)
   const fileUploadRef = useRef(null)
   const [dialog, setDialog] = useState({
@@ -151,6 +151,15 @@ export default function CreateTest() {
   }
   const handleSubmit = async (e: any) => {
     e.preventDefault()
+    // convert every score to a Number type
+    formData.questions.map((question: any) => {
+      question.exampleCases.map((example: any) => {
+        example.score = Number(example.score)
+      })
+      question.testCases.map((test: any) => {
+        test.score = Number(test.score)
+      })
+    })
     const response = await fetch("/api/instanttest/create", {
       method: "POST",
       headers: {

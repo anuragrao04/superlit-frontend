@@ -57,6 +57,7 @@ export default function TestCasePanel({ testData, setTestData, currentQuestionIn
   }
 
   const handleSubmit = async () => {
+    console.log("submitting!")
     const payload = {
       "code": editorData[currentQuestionIndex],
       "language": "c",

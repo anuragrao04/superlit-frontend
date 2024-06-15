@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { useNavigate, useParams } from "react-router-dom"
 import AlertDialogWrapper from "@/components/ui/alertDialogWrapper"
@@ -83,10 +84,38 @@ export default function TeacherDashboard() {
     }
   }
 
-  if (!studentScores) return (<div className="bg-gray-100 flex justify-center items-center h-screen w-screen">Loading...</div>)
+
+  function downloadCSV() {
+    const tableId = "scores-table"
+    const separator = ","; // Column separator
+    const rows = document.querySelectorAll(`#${tableId} tr`);
+
+    // Construct CSV
+    let csv = [];
+    rows.forEach((row) => {
+      let cols = row.querySelectorAll("td, th");
+      let rowArray = Array.from(cols).map(col => col.innerText.replace(/(\r\n|\n|\r)/gm, "").replace(/(\s\s)/gm, " "));
+      csv.push(rowArray.join(separator));
+    });
+
+    // Create CSV string
+    let csvString = csv.join("\n");
+
+    // Trigger download
+    let filename = "export_" + tableId + "_" + new Date().toLocaleDateString() + ".csv";
+    let link = document.createElement("a");
+    link.style.display = "none";
+    link.setAttribute("href", "data:text/csv;charset=utf-8," + encodeURIComponent(csvString));
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  if (!studentScores) return (<div className="bg-gray-100 flex justify-center items-center min-h-screen w-screen">Loading...</div>)
 
   return (
-    <div className="w-screen h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="w-screen min-h-screen bg-gray-100 dark:bg-gray-900">
       <div className="max-w-4xl mx-auto py-10 px-6 space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Student Scores</h1>
@@ -109,7 +138,7 @@ export default function TeacherDashboard() {
           </div>
         </div>
         <div className="relative w-full overflow-auto">
-          <Table>
+          <Table id="scores-table">
             <TableHeader>
               <TableRow>
                 <TableHead className="font-mono">University ID</TableHead>
@@ -138,6 +167,8 @@ export default function TeacherDashboard() {
               }
             </TableBody>
           </Table>
+
+          <Button onClick={downloadCSV}>Download as CSV</Button>
         </div>
       </div>
 
