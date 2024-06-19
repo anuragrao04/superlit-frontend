@@ -53,9 +53,9 @@ export default function QuestionsPanel({ testData, currentQuestionIndex, setCurr
                     <div className="mt-3" key={index}>
                       <div className="text-2xl">Case {index + 1}</div>
                       <div>Input</div>
-                      <CodeBlock code={testCase.Input} className="" />
+                      <CodeBlock code={testCase.input} className="" />
                       <div>Expected Output</div>
-                      <CodeBlock code={testCase.Input} className="" />
+                      <CodeBlock code={testCase.input} className="" />
                       {testCase.explanation != "" ? (
                         <>
                           <div>Explanation</div>

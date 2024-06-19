@@ -21,7 +21,7 @@ export default function TestCasePanel({ testData, setTestData, currentQuestionIn
       const payload = {
         "code": editorData[currentQuestionIndex],
         "language": "c",
-        "input": testCase["Input"]
+        "input": testCase["input"]
       }
 
       const response = await fetch("/api/run", {
@@ -124,7 +124,7 @@ export default function TestCasePanel({ testData, setTestData, currentQuestionIn
                       <TabsContent key={index} value={`case${index + 1}`} className="flex flex-col items-center justify-left w-full">
                         <div className="w-full">
                           <div>Input</div>
-                          <Textarea value={testCase["Input"]} readOnly></Textarea>
+                          <Textarea value={testCase["input"]} readOnly></Textarea>
                         </div>
 
                         <div className="w-full">

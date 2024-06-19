@@ -4,17 +4,19 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import AlertDialogWrapper from "@/components/ui/alertDialogWrapper"
+import { useNavigate } from "react-router-dom"
 
 
 export default function CreateTest() {
   // dialog stuff
-  const dialogRef: Ref = useRef(null)
+  const dialogRef = useRef(null)
   const formRef = useRef(null)
   const fileUploadRef = useRef(null)
   const [dialog, setDialog] = useState({
     title: "",
     description: "",
   })
+  const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
     email: "",
@@ -382,6 +384,7 @@ export default function CreateTest() {
         <div className="mt-8 flex flex-col justify-start items-start space-y-3">
           <Button type="submit">Submit</Button>
           <Button type="button" variant="secondary" onClick={downloadTestData} className="">Download Test Data</Button>
+          <Button type="button" variant="outline" onClick={() => navigate("/")} className="">Go Back</Button>
         </div>
       </form>
 

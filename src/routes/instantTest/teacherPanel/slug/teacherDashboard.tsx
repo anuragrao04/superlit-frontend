@@ -28,16 +28,16 @@ export default function TeacherDashboard() {
 
       // some sorting logic
       // sort data.submissions by universityID
-      data.submissions.sort((a: string, b: string) => a.UniversityID - b.UniversityID)
+      data.submissions.sort((a: string, b: string) => a.universityID - b.universityID)
 
       // pad the answer array where values are not available for that question
       const minQuestionIndex = Math.min(...(data.questionIDs))
       data.submissions.forEach((submission: any) => {
         const answerArray = new Array(data.questionIDs.length).fill(null)
-        submission.Answers.forEach((answer: any) => {
-          answerArray[answer.QuestionID - minQuestionIndex] = answer.Score
+        submission.answers.forEach((answer: any) => {
+          answerArray[answer.questionID - minQuestionIndex] = answer.score
         })
-        submission.AnswersPadded = answerArray
+        submission.answersPadded = answerArray
       })
 
 
@@ -155,13 +155,13 @@ export default function TeacherDashboard() {
               {
                 studentScores?.submissions.map((submission: any, index: number) => (
                   <TableRow key={index}>
-                    <TableCell className="font-mono">{submission.UniversityID}</TableCell>
+                    <TableCell className="font-mono">{submission.universityID}</TableCell>
                     {
-                      submission.AnswersPadded.map((answer: any, answerIndex: number) => (
+                      submission.answersPadded.map((answer: any, answerIndex: number) => (
                         <TableCell className="font-mono" key={answerIndex}>{answer != null ? answer : "Didn't Submit"}</TableCell>
                       ))
                     }
-                    <TableCell className="font-mono">{submission.TotalScore}</TableCell>
+                    <TableCell className="font-mono">{submission.totalScore}</TableCell>
                   </TableRow>
                 ))
               }

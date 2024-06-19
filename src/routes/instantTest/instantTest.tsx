@@ -137,7 +137,6 @@ export default function InstantTest() {
                   onChange={(value: any) => {
                     const tempEditorData: any = editorData
                     tempEditorData[currentQuestionIndex] = value
-                    console.log(editorData)
                     setEditorData([...tempEditorData])
                   }}
                 />
