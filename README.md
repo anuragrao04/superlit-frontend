@@ -1,30 +1,32 @@
-# React + TypeScript + Vite
+# Superlit Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## What's Superlit?
 
-Currently, two official plugins are available:
+- Superlit is a code submission and evaluation platform tailored towards universities.
+- We aim to eliminate plagiarism in code assignments and tests
+- We include advance features for plagiarism detection. A full list will be published here after completion
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Installation & Development
 
-## Expanding the ESLint configuration
+- Install a recent version of `node (>18)`
+- clone this repository
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+```bash
+git clone https://github.com/anuragrao04/superlit-frontend
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- `cd` into the repository
+
+```bash
+cd superlit-frontend
+```
+
+- Copy `.env.example` to a new file `.env` and fill out the fields there
+- Install the dependencies and run the development server
+
+```bash
+npm i
+npm run dev
+```
+
+- You should find the website running on `http://localhost:5173`
