@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { useNavigate, useParams } from "react-router-dom"
 import AlertDialogWrapper from "@/components/ui/alertDialogWrapper"
+import { Fragment } from "react"
+import PopulateSheet from "@/routes/instantTest/teacherPanel/slug/populateGoogleSheet"
 
 export default function TeacherDashboard() {
   const { privateCode } = useParams()
@@ -35,7 +37,13 @@ export default function TeacherDashboard() {
       data.submissions.forEach((submission: any) => {
         const answerArray = new Array(data.questionIDs.length).fill(null)
         submission.answers.forEach((answer: any) => {
-          answerArray[answer.questionID - minQuestionIndex] = answer.score
+          console.log(answer)
+          answerArray[answer.questionID - minQuestionIndex] = {
+            score: answer.score,
+            AIVerified: answer.AIVerified,
+            AIVerdict: answer.AIVerdict,
+            studentCode: answer.code
+          }
         })
         submission.answersPadded = answerArray
       })
@@ -84,6 +92,40 @@ export default function TeacherDashboard() {
     }
   }
 
+  function handleAIVerify() {
+    const response = fetch("/api/instanttest/aiverify", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ privateCode: privateCode }),
+    })
+    response.then((res) => {
+      if (res.status === 200) {
+        setDialog({
+          title: "Success",
+          description: "AI Verification started successfully. Check back here in a few minutes"
+        })
+      } else {
+        setDialog({
+          title: "Error",
+          description: "Failed to start AI Verification. Please try again."
+        })
+      }
+      dialogRef.current.click()
+    })
+  }
+
+  function downloadStudentCode(code: string, studentUniversityID: string,) {
+    let filename = studentUniversityID + "_" + new Date().toLocaleDateString() + ".txt";
+    let link = document.createElement("a");
+    link.style.display = "none";
+    link.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(code));
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 
   function downloadCSV() {
     const tableId = "scores-table"
@@ -116,7 +158,7 @@ export default function TeacherDashboard() {
 
   return (
     <div className="w-screen min-h-screen bg-gray-100 dark:bg-gray-900">
-      <div className="max-w-4xl mx-auto py-10 px-6 space-y-6">
+      <div className="max-w-7xl mx-auto py-10 px-6 space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Student Scores</h1>
           <div className="flex items-center space-x-2">
@@ -144,7 +186,11 @@ export default function TeacherDashboard() {
                 <TableHead className="font-mono">University ID</TableHead>
                 {
                   studentScores?.questionIDs.map((questionID: number, index: number) => (
-                    <TableHead className="font-mono" key={index}>Question {index + 1}</TableHead>
+                    <Fragment key={index}>
+                      <TableHead className="font-mono" >Question {index + 1}</TableHead>
+                      <TableHead className="font-mono" >Question {index + 1} AI Verify</TableHead>
+                      <TableHead className="font-mono" >Question {index + 1} Student's Code</TableHead>
+                    </Fragment>
                   )
                   )
                 }
@@ -158,7 +204,31 @@ export default function TeacherDashboard() {
                     <TableCell className="font-mono">{submission.universityID}</TableCell>
                     {
                       submission.answersPadded.map((answer: any, answerIndex: number) => (
-                        <TableCell className="font-mono" key={answerIndex}>{answer != null ? answer : "Didn't Submit"}</TableCell>
+                        <Fragment key={answerIndex}>
+                          <TableCell className="font-mono" >{answer != null ? answer.score : "Didn't Submit"}</TableCell>
+                          {
+                            answer != null && answer.AIVerified ? (
+                              answer.AIVerdict ? (
+                                <TableCell className="font-mono text-green-500" >Verified Genuine</TableCell>
+                              ) : (
+                                <TableCell className="font-mono text-red-500" >Check Student's Code!</TableCell>
+                              )
+                            ) : (
+                              <TableCell className="font-mono" >Not Verified</TableCell>
+                            )
+                          }
+
+
+                          {
+                            answer != null ? (
+                              <TableCell className="font-mono">
+                                <Button onClick={() => downloadStudentCode(answer.studentCode, submission.universityID)}>Download</Button>
+                              </TableCell>
+                            ) : (
+                              <TableCell className="font-mono" >Didn't Submit</TableCell>
+                            )
+                          }
+                        </Fragment>
                       ))
                     }
                     <TableCell className="font-mono">{submission.totalScore}</TableCell>
@@ -168,11 +238,13 @@ export default function TeacherDashboard() {
             </TableBody>
           </Table>
 
-          <Button onClick={downloadCSV}>Download as CSV</Button>
+          <Button onClick={downloadCSV} className="m-2">Download as CSV</Button>
+          <PopulateSheet privateCode={privateCode} setDialog={setDialog} dialogRef={dialogRef} />
+          <Button onClick={handleAIVerify} className="m-2">Verify With AI</Button>
         </div>
       </div>
 
       <AlertDialogWrapper dialog={dialog} dialogRef={dialogRef} />
-    </div>
+    </div >
   )
 }

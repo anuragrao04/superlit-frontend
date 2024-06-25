@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import AlertDialogWrapper from "@/components/ui/alertDialogWrapper"
 import { useNavigate } from "react-router-dom"
+import { LanguageMultiSelect } from "@/components/ui/language-multi-select"
 
 
 export default function CreateTest() {
@@ -25,6 +26,8 @@ export default function CreateTest() {
         title: "",
         question: "",
         preWrittenCode: "",
+        languages: [],
+        constraints: [],
         exampleCases: [
           {
             input: "",
@@ -51,6 +54,30 @@ export default function CreateTest() {
       [name]: value,
     }))
   }
+
+  const handleLanguageSelect = (index: number, language: any) => {
+    setFormData((prevData) => {
+      const updatedQuestions = [...prevData.questions];
+      updatedQuestions[index].languages.push(language);
+      return {
+        ...prevData,
+        questions: updatedQuestions,
+      };
+    });
+  };
+
+  const handleLanguageUnselect = (index: number, language: any) => {
+    setFormData((prevData) => {
+      const updatedQuestions = [...prevData.questions];
+      updatedQuestions[index].languages = updatedQuestions[index].languages.filter(
+        (lang) => lang !== language
+      );
+      return {
+        ...prevData,
+        questions: updatedQuestions,
+      };
+    });
+  };
 
   const handleQuestionChange = (index: any, field: any, value: any) => {
     setFormData((prevData) => {
@@ -83,6 +110,17 @@ export default function CreateTest() {
     })
   }
 
+  const handleConstraintsChange = (questionIndex: any, constraintIndex: any, value: any) => {
+    setFormData((prevData) => {
+      const updatedQuestions = [...prevData.questions]
+      updatedQuestions[questionIndex].constraints[constraintIndex] = value
+      return {
+        ...prevData,
+        questions: updatedQuestions,
+      }
+    })
+  }
+
 
   const addQuestion = () => {
     setFormData((prevData) => ({
@@ -93,6 +131,8 @@ export default function CreateTest() {
           title: "",
           question: "",
           preWrittenCode: "",
+          languages: [],
+          constraints: [],
           exampleCases: [
             {
               input: "",
@@ -112,6 +152,7 @@ export default function CreateTest() {
       ],
     }))
   }
+
   const deleteQuestion = (index: number) => {
     setFormData((prevData) => {
       const updatedQuestions = [...prevData.questions]
@@ -151,7 +192,25 @@ export default function CreateTest() {
       }
     })
   }
+
+
+  const addConstraint = (questionIndex: number) => {
+    setFormData((prevData) => {
+      const updatedQuestions = [...prevData.questions]
+      updatedQuestions[questionIndex].constraints.push("")
+      return {
+        ...prevData,
+        questions: updatedQuestions,
+      }
+    })
+  }
+
+
   const handleSubmit = async (e: any) => {
+
+    if (!formRef.current.reportValidity()) {
+      return
+    }
     e.preventDefault()
     // convert every score to a Number type
     formData.questions.map((question: any) => {
@@ -232,7 +291,6 @@ export default function CreateTest() {
         <h1 className="text-3xl font-bold mb-6">Create Test</h1>
         <Button variant="outline" onClick={() => fileUploadRef.current.click()}>
           <input type="file" accept=".json" onChange={handleFileUpload} className="hidden" ref={fileUploadRef}>
-
           </input>
           Upload Test Data
         </Button>
@@ -281,6 +339,39 @@ export default function CreateTest() {
                 required
               />
             </div>
+
+
+            <div className="mb-4">
+              <Label htmlFor={`question-languages-${index}`}>Languages Allowed</Label>
+              <LanguageMultiSelect
+                languagesSelected={question.languages}
+                onSelect={(language) => handleLanguageSelect(index, language)}
+                onUnselect={(language) => handleLanguageUnselect(index, language)}
+              />
+            </div>
+
+            <div className="mb-4">
+              <h3 className="text-lg font-bold mb-4">AI Constraints</h3>
+              {
+                question.constraints.map((constraint, constraintIndex) => (
+                  <div key={constraintIndex} className="mb-4">
+                    <div>
+                      <Label htmlFor={`constraint-${index}-${constraintIndex}`}>Constraint {constraintIndex + 1}</Label>
+                      <Textarea
+                        id={`constraint-${index}-${constraintIndex}`}
+                        value={constraint}
+                        onChange={(e) => handleConstraintsChange(index, constraintIndex, e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+                ))
+              }
+              <Button type="button" onClick={() => addConstraint(index)} className="mb-4">
+                Add Constraint
+              </Button>
+            </div>
+
             <div className="mb-4">
               <h3 className="text-lg font-bold mb-4">Example Cases</h3>
               {question.exampleCases.map((example, exampleIndex) => (

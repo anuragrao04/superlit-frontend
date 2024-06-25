@@ -1,11 +1,20 @@
 import Editor, { MonacoDiffEditor, loader } from "@monaco-editor/react";
 import * as monaco from "monaco-editor";
-
+import SuperlitLogo from "@/components/superlitLogo";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 import AlertDialogWrapper from "@/components/ui/alertDialogWrapper";
 import QuestionsPanel from "./components/questionsPanel";
@@ -17,9 +26,15 @@ import { useState, useEffect, useRef } from "react";
 loader.config({
   monaco,
 });
-// This enables monaco editor to use node_modules instead of a CDN. This enables our app to be fully offline and hosted on a local network
+// This enables monaco editor to use node_modules instead of a CDN. 
+// This enables our app to be fully offline and hosted on a local network
 
 loader.init()
+
+const languageToEditorLanguageMapping = {
+  "c": "c",
+  "py": "python"
+}
 
 export default function InstantTest() {
   let { publicCode, universityID } = useParams();
@@ -29,6 +44,7 @@ export default function InstantTest() {
   const dialogRef = useRef(null)
   const [dialog, setDialog] = useState({
   })
+  const [currentLanguage, setCurrentLanguage] = useState([])
 
   const navigate = useNavigate()
 
@@ -59,12 +75,17 @@ export default function InstantTest() {
     }
 
     setTestData(responseJSON)
+    console.log(responseJSON)
 
     const tempEditorData = responseJSON.questions.map((question: any) => {
       return question.preWrittenCode
     })
 
+
     setEditorData(tempEditorData)
+    setCurrentLanguage(responseJSON.questions.map((question) => {
+      return question.languages[0]
+    }))
     console.log(responseJSON)
   }
 
@@ -73,6 +94,7 @@ export default function InstantTest() {
   useEffect(() => {
     fetchTestData()
   }, [])
+
 
   useEffect(() => {
     const handleBeforeUnload = (event: any) => {
@@ -85,7 +107,7 @@ export default function InstantTest() {
         okText: "Take me back",
         onCancel: () => navigate("/"),
         onOk: () => event.preventDefault()
-        // on ok and on cancel are flipped to make the primary button be cancel and stay
+        // on ok and on cancel are flipped to make the primary button be cancel and secondary button be stay
       })
 
       dialogRef.current.click()
@@ -112,14 +134,39 @@ export default function InstantTest() {
 
 
 
-
+  if (testData == null) return <div>Loading...</div>
 
   return (
     <div>
+      <div className="min-w-screen min-h-[5vh] flex justify-between items-center">
+        <SuperlitLogo />
+        <Select value={currentLanguage[currentQuestionIndex]} onValueChange={(value: string) => {
+          const tempCurrentLanguage = currentLanguage
+          tempCurrentLanguage[currentQuestionIndex] = value
+          setCurrentLanguage([...tempCurrentLanguage])
+        }}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select a language" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Language</SelectLabel>
+              {testData.questions[currentQuestionIndex].languages.map((language: string, index: number) => (
+                <SelectItem value={language} key={index}>{language.toUpperCase()}</SelectItem>
+              )
+              )
+              }
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+
+
+
+      </div>
 
       <ResizablePanelGroup
         direction="horizontal"
-        className="min-w-screen min-h-screen rounded-lg border"
+        className="min-w-screen min-h-[95vh] rounded-lg border"
       >
         <ResizablePanel defaultSize={25}>
           <QuestionsPanel testData={testData} currentQuestionIndex={currentQuestionIndex} setCurrentQuestionIndex={setCurrentQuestionIndex} />
@@ -130,7 +177,7 @@ export default function InstantTest() {
             <ResizablePanel defaultSize={75}>
               <div className="flex flex-col items-center justify-center h-full">
                 <Editor
-                  defaultLanguage="c"
+                  language={languageToEditorLanguageMapping[currentLanguage[currentQuestionIndex]]}
                   value={testData == null ? "Loading..." : editorData[currentQuestionIndex]}
                   theme="vs-dark"
                   className="resize-y overflow-auto"
@@ -144,7 +191,7 @@ export default function InstantTest() {
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={25}>
-              <TestCasePanel testData={testData} setTestData={setTestData} currentQuestionIndex={currentQuestionIndex} editorData={editorData} publicCode={publicCode} universityID={universityID} />
+              <TestCasePanel testData={testData} setTestData={setTestData} currentQuestionIndex={currentQuestionIndex} editorData={editorData} publicCode={publicCode} universityID={universityID} languages={currentLanguage} />
             </ResizablePanel>
           </ResizablePanelGroup>
         </ResizablePanel>

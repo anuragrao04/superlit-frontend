@@ -12,7 +12,7 @@ import AlertDialogWrapper from "@/components/ui/alertDialogWrapper"
 import { useRef, useState } from "react"
 
 
-export default function TestCasePanel({ testData, setTestData, currentQuestionIndex, editorData, publicCode, universityID }: { testData: any, setTestData: any, editorData: any, currentQuestionIndex: any, publicCode: string | undefined, universityID: string | undefined }) {
+export default function TestCasePanel({ testData, setTestData, currentQuestionIndex, editorData, publicCode, universityID, languages }: { testData: any, setTestData: any, editorData: any, currentQuestionIndex: any, publicCode: string | undefined, universityID: string | undefined, languages: string[] }) {
   const dialogRef = useRef(null)
   const [dialog, setDialog] = useState({})
   const handleRun = async () => {
@@ -20,7 +20,7 @@ export default function TestCasePanel({ testData, setTestData, currentQuestionIn
     await Promise.all(testData.questions[currentQuestionIndex].exampleCases.map(async (testCase: any, index: any) => {
       const payload = {
         "code": editorData[currentQuestionIndex],
-        "language": "c",
+        "language": languages[currentQuestionIndex],
         "input": testCase["input"]
       }
 
@@ -60,7 +60,7 @@ export default function TestCasePanel({ testData, setTestData, currentQuestionIn
     console.log("submitting!")
     const payload = {
       "code": editorData[currentQuestionIndex],
-      "language": "c",
+      "language": languages[currentQuestionIndex],
       "publicCode": publicCode,
       "universityID": universityID,
       "questionID": testData.questions[currentQuestionIndex].ID,
