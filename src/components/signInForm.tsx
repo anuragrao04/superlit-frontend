@@ -6,18 +6,20 @@ import { Button } from "@/components/ui/button"
 import { useState, useRef } from "react"
 import AlertDialogWrapper from "./ui/alertDialogWrapper"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "@/lib/authContext"
 
 export default function SignInForm() {
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
     universityID: "",
     password: "",
-    isTeacher: false,
   })
   const [dialog, setDialog] = useState({
     title: "",
     description: "",
   })
+
+  const { login } = useAuth()
 
   const dialogRef = useRef(null)
 
@@ -61,7 +63,8 @@ export default function SignInForm() {
       })
     } else {
       // redirect to /home with props 'userData' being the response we just received
-      navigate("/home/teacher", { state: { userData: responseJson } })
+      login(responseJson.token)
+      navigate("/home/teacher")
     }
     dialogRef.current.click()
   }
@@ -102,12 +105,6 @@ export default function SignInForm() {
                 required
                 type="password"
               />
-            </div>
-            <div className="flex items-center space-x-2">
-              <input type="checkbox" className="dark:bg-gray-50 dark:border-gray-400 dark:checked:bg-gray-50 dark:checked:border-gray-400" id="is-teacher" name="isTeacher" onChange={handleChange} />
-              <Label className="dark:text-gray-400" htmlFor="is-teacher">
-                I am a teacher
-              </Label>
             </div>
           </CardContent>
           <CardFooter>

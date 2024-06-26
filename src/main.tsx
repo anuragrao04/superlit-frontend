@@ -11,6 +11,8 @@ import TeacherDashboard from "./routes/instantTest/teacherPanel/slug/teacherDash
 import CreateTest from "./routes/instantTest/createTest/createTest.tsx";
 import TeacherHomePage from "./routes/homePages/teacherHomePage.tsx";
 
+import { AuthProvider } from "@/lib/authContext"
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -60,7 +62,9 @@ const router = createBrowserRouter([
 
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-    <RouterProvider router={router} />
-  </ThemeProvider>
+  <AuthProvider>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <RouterProvider router={router} />
+    </ThemeProvider>
+  </AuthProvider>
 );
