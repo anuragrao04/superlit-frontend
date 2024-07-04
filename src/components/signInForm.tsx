@@ -1,4 +1,3 @@
-
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { CardContent, CardFooter, Card } from "@/components/ui/card"
@@ -64,7 +63,11 @@ export default function SignInForm() {
     } else {
       // redirect to /home with props 'userData' being the response we just received
       login(responseJson.token)
-      navigate("/home/teacher")
+      if (responseJson.isTeacher) {
+        navigate("/home/teacher")
+      } else {
+        navigate("/home/student")
+      }
     }
     dialogRef.current.click()
   }

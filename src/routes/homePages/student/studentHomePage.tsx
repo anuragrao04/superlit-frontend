@@ -3,12 +3,12 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { useEffect, useRef, useState } from "react"
 import SuperlitLogo from "@/components/superlitLogo"
 import { Button } from "@/components/ui/button"
-import ClassroomCard, { CreateClassroomCard } from "./components/classroomCard"
+import ClassroomCard, { JoinClassroomCard } from "./../components/classroomCard"
 import { useAuth } from "@/lib/authContext"
 import AlertDialogWrapper from "@/components/ui/alertDialogWrapper"
 
 
-export default function TeacherHomePage() {
+export default function StudentHomePage() {
   const { state } = useLocation()
   const navigate = useNavigate()
   const [userData, setUserData] = useState(null)
@@ -63,7 +63,6 @@ export default function TeacherHomePage() {
       </div>
 
 
-      <Boxes className="-z-50" />
 
       <div className="h-[95vh] flex justify-center items-center">
         <div className="grid" style={{
@@ -77,7 +76,7 @@ export default function TeacherHomePage() {
           ))
           }
 
-          <CreateClassroomCard token={token} setDialog={setDialog} dialogRef={dialogRef} fetchUserData={fetchUserData} />
+          <JoinClassroomCard token={token} setDialog={setDialog} dialogRef={dialogRef} fetchUserData={fetchUserData} />
 
         </div>
       </div>
@@ -87,3 +86,4 @@ export default function TeacherHomePage() {
     </div >
   )
 }
+

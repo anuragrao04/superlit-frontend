@@ -113,22 +113,20 @@ export default function InstantTest() {
       dialogRef.current.click()
     };
 
-    const handleVisibilityChange = () => {
-      if (document.visibilityState == "hidden") {
-        setDialog({
-          title: "No cheating!",
-          description: "You are not allowed to cheat. Please stay on the test page. If you leave, your test will be submitted and you will get 0 points. If you think this is a mistake, please contact your teacher.",
-        })
-        dialogRef.current.click()
-      }
+    const handleCheater = () => {
+      setDialog({
+        title: "No cheating!",
+        description: "You are not allowed to cheat. Please stay on the test page. If you leave, your test will be submitted and you will get 0 points. If you think this is a mistake, please contact your teacher.",
+      })
+      dialogRef.current.click()
     }
 
 
     window.addEventListener('beforeunload', handleBeforeUnload);
-    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('blur', handleCheater);
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('blur', handleCheater);
     };
   }, []);
 

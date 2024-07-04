@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea"
 import AlertDialogWrapper from "@/components/ui/alertDialogWrapper"
 import { useNavigate } from "react-router-dom"
 import { LanguageMultiSelect } from "@/components/ui/language-multi-select"
+import "./css/aiButton.css"
 
 
 export default function CreateTest() {
@@ -367,9 +368,9 @@ export default function CreateTest() {
                   </div>
                 ))
               }
-              <Button type="button" onClick={() => addConstraint(index)} className="mb-4">
+              <button type="button" onClick={() => addConstraint(index)} className="ai-btn">
                 Add Constraint
-              </Button>
+              </button>
             </div>
 
             <div className="mb-4">

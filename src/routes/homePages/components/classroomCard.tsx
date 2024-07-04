@@ -84,3 +84,64 @@ export function CreateClassroomCard({ token, dialogRef, setDialog, fetchUserData
 
   )
 }
+
+
+export function JoinClassroomCard({ token, dialogRef, setDialog, fetchUserData }: { token: string, dialogRef: any, setDialog: any, fetchUserData: () => void }) {
+
+  const classroomCodeRef = useRef(null)
+
+  const createClassroom = async () => {
+    const classroomCode = classroomCodeRef.current.value
+    try {
+      const response = await fetch("/api/classroom/adduser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": token
+        },
+        body: JSON.stringify({ classroomCode }),
+      })
+      const data = await response.json()
+      if (data.error) {
+        setDialog({
+          title: "Error",
+          description: "Something went wrong: " + data.error,
+        })
+        dialogRef.current.click()
+      } else {
+        fetchUserData()
+        setDialog({
+          title: "Success",
+          description: "You've joined the classroom successfully!"
+        })
+        dialogRef.current.click()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <div className="bg-white dark:bg-gray-800 shadow-md p-5 flex flex-col items-center justify-center space-y-5 rounded-lg hover:outline transition-all cursor-pointer select-none" onClick={createClassroom}>
+          <div className="text-5xl font-bold">+</div>
+          <div className="text-xl font-bold text-gray-700 dark:text-gray-100">Join A Classroom</div>
+        </div>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Enter classroom code</AlertDialogTitle>
+          <AlertDialogDescription>
+            <Input type="text" placeholder="Enter Code Here" ref={classroomCodeRef}></Input>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogAction onClick={createClassroom}>Join Classroom</AlertDialogAction>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}
