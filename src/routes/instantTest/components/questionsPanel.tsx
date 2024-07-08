@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/carousel"
 import { Card } from "@/components/ui/card"
 import { useEffect, useState } from "react"
+import { ScrollArea } from "@radix-ui/react-scroll-area"
 
 
 
@@ -39,7 +40,7 @@ export default function QuestionsPanel({ testData, currentQuestionIndex, setCurr
           {testData.questions.map((question: any, index: any) => {
             return (
               <CarouselItem key={index}>
-                <div className="w-full">
+                <ScrollArea className="w-full max-h-[88vh] overflow-x-hidden">
                   <div className="text-4xl">
                     {question.title}
                   </div>
@@ -68,7 +69,7 @@ export default function QuestionsPanel({ testData, currentQuestionIndex, setCurr
                   ))
                   }
 
-                </div>
+                </ScrollArea>
               </CarouselItem>
             )
           })}
