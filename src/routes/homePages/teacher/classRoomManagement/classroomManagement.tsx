@@ -56,42 +56,46 @@ export default function ClassRoomManagement() {
           <h1 className="text-2xl font-bold">{classroomData.name}</h1>
         </div>
         <div className="relative w-full overflow-auto">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="font-mono">Name</TableHead>
-                <TableHead className="font-mono">Description</TableHead>
-                <TableHead className="font-mono">Start Time</TableHead>
-                <TableHead className="font-mono">End Time</TableHead>
-                <TableHead className="font-mono">View Scores</TableHead>
-                <TableHead className="font-mono">Edit</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {
-                classroomData?.assignments.map((assignment: any, index: number) => (
-                  <TableRow key={index}>
-                    <TableCell className="font-mono">{assignment.name}</TableCell>
-                    <TableCell className="font-mono">{assignment.description}</TableCell>
-                    <TableCell className="font-mono">{new Date(assignment.startTime).toLocaleString('en-IN', { hour12: true })}</TableCell>
-                    <TableCell className="font-mono">{new Date(assignment.endTime).toLocaleString('en-IN', { hour12: true })}</TableCell>
-                    <TableCell className="font-mono">
-                      <Button onClick={() => {
-                        navigate(`/teacher/classroom/${classRoomCode}/assignment/${assignment.ID}/scores`)
-                      }}>View Scores</Button>
-                    </TableCell>
-                    <TableCell>
-                      <Button onClick={() => {
-                        navigate(`/teacher/classroom/${classRoomCode}/assignment/${assignment.ID}/edit`)
-                      }}>
-                        Edit
-                      </Button>
-                    </TableCell>
+          {
+            classroomData.assignments.length == 0 ? "No Assignments Yet!" : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="font-mono">Name</TableHead>
+                    <TableHead className="font-mono">Description</TableHead>
+                    <TableHead className="font-mono">Start Time</TableHead>
+                    <TableHead className="font-mono">End Time</TableHead>
+                    <TableHead className="font-mono">View Scores</TableHead>
+                    <TableHead className="font-mono">Edit</TableHead>
                   </TableRow>
-                ))
-              }
-            </TableBody>
-          </Table>
+                </TableHeader>
+                <TableBody>
+                  {
+                    classroomData?.assignments.map((assignment: any, index: number) => (
+                      <TableRow key={index}>
+                        <TableCell className="font-mono">{assignment.name}</TableCell>
+                        <TableCell className="font-mono">{assignment.description}</TableCell>
+                        <TableCell className="font-mono">{new Date(assignment.startTime).toLocaleString('en-IN', { hour12: true })}</TableCell>
+                        <TableCell className="font-mono">{new Date(assignment.endTime).toLocaleString('en-IN', { hour12: true })}</TableCell>
+                        <TableCell className="font-mono">
+                          <Button onClick={() => {
+                            navigate(`/home/teacher/classroom/${classRoomCode}/assignment/${assignment.ID}/scores`)
+                          }}>View Scores</Button>
+                        </TableCell>
+                        <TableCell>
+                          <Button onClick={() => {
+                            navigate(`/home/teacher/classroom/${classRoomCode}/assignment/${assignment.ID}/edit`)
+                          }}>
+                            Edit
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  }
+                </TableBody>
+              </Table>
+            )
+          }
         </div>
       </div>
     </div >

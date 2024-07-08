@@ -62,7 +62,7 @@ export default function TeacherHomePage() {
 
 
 
-      <div className="h-[95vh] flex justify-center items-center">
+      <div className="h-[95vh] flex flex-col justify-between items-center p-5">
         <div className="grid" style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
@@ -78,6 +78,13 @@ export default function TeacherHomePage() {
 
           <JoinClassroomCard token={token} setDialog={setDialog} dialogRef={dialogRef} fetchUserData={fetchUserData} />
           <CreateClassroomCard token={token} setDialog={setDialog} dialogRef={dialogRef} fetchUserData={fetchUserData} />
+        </div>
+
+        <div className="w-full flex justify-end items-center">
+          <Button onClick={() => navigate(`/home/teacher/classroom/assignment/newassignment`)}>
+            + New Assignment
+          </Button>
+
         </div>
       </div>
 

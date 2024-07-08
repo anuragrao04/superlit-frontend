@@ -124,6 +124,8 @@ export default function InstantTest() {
 
     window.addEventListener('beforeunload', handleBeforeUnload);
     window.addEventListener('blur', handleCheater);
+
+
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       window.removeEventListener('blur', handleCheater);

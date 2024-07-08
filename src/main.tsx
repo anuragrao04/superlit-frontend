@@ -13,6 +13,7 @@ import StudentHomePage from "./routes/homePages/student/studentHomePage.tsx";
 
 import { AuthProvider } from "@/lib/authContext"
 import ClassRoomManagement from "./routes/homePages/teacher/classRoomManagement/classroomManagement.tsx";
+import NewAssignmentPage from "./routes/homePages/teacher/classRoomManagement/newassignment.tsx";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,11 @@ const router = createBrowserRouter([
     path: "/home/teacher",
     element: <TeacherHomePage />
   },
+  {
+    path: "/home/teacher/classroom/assignment/newassignment",
+    element: <NewAssignmentPage />
+  },
+
   {
     path: "/home/teacher/classroom/:classRoomCode",
     element: <ClassRoomManagement />
