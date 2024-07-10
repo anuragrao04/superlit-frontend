@@ -72,7 +72,9 @@ export default function StudentHomePage() {
         }}>
 
           {userData == null ? 'loading...' : userData.classrooms.map((classroom: any, index: number) => (
-            <ClassroomCard key={index} name={classroom.name} code={classroom.code} />
+            <div key={index} onClick={() => navigate("/home/student/classroom/" + classroom.code)}>
+              <ClassroomCard name={classroom.name} code={classroom.code} />
+            </div>
           ))
           }
 

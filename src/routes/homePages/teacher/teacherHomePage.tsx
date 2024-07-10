@@ -81,7 +81,11 @@ export default function TeacherHomePage() {
         </div>
 
         <div className="w-full flex justify-end items-center">
-          <Button onClick={() => navigate(`/home/teacher/classroom/assignment/newassignment`)}>
+          <Button onClick={() => navigate(`/home/teacher/classroom/assignment/newassignment`, {
+            state: {
+              classrooms: userData.classrooms
+            }
+          })}>
             + New Assignment
           </Button>
 

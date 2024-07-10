@@ -14,6 +14,8 @@ import StudentHomePage from "./routes/homePages/student/studentHomePage.tsx";
 import { AuthProvider } from "@/lib/authContext"
 import ClassRoomManagement from "./routes/homePages/teacher/classRoomManagement/classroomManagement.tsx";
 import NewAssignmentPage from "./routes/homePages/teacher/classRoomManagement/newassignment.tsx";
+import StudentClassroomManagement from "./routes/homePages/student/classroomManagement/classroomManagement.tsx";
+import AttemptAssignment from "./routes/homePages/student/classroomManagement/attemptAssignment.tsx";
 
 const router = createBrowserRouter([
   {
@@ -59,6 +61,13 @@ const router = createBrowserRouter([
   {
     path: "/home/student",
     element: <StudentHomePage />
+  },
+  {
+    path: "/home/student/classroom/:classroomCode",
+    element: <StudentClassroomManagement />
+  }, {
+    path: "/home/student/classroom/:classroomCode/assignment/:assignmentID/attempt",
+    element: <AttemptAssignment />
   },
   // 404 path
   {

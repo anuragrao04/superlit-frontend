@@ -1,3 +1,4 @@
+
 import Editor, { MonacoDiffEditor, loader } from "@monaco-editor/react";
 import * as monaco from "monaco-editor";
 import SuperlitLogo from "@/components/superlitLogo";
@@ -17,12 +18,13 @@ import {
 } from "@/components/ui/select"
 
 import AlertDialogWrapper from "@/components/ui/alertDialogWrapper";
-import QuestionsPanel from "./components/questionsPanel";
-import TestCasePanel from "./components/testCasePanel";
+import QuestionsPanel from "@/routes/instantTest/components/questionsPanel";
+// resuse the questions panel from the instant test page
+import AssignmentTestCasePanel from "./components/testCasePanel";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import { useTheme } from "@/components/theme-provider";
+import { useAuth } from "@/lib/authContext";
 
 loader.config({
   monaco,
@@ -37,30 +39,30 @@ const languageToEditorLanguageMapping = {
   "py": "python"
 }
 
-export default function InstantTest() {
-  let { publicCode, universityID } = useParams();
-  const [testData, setTestData] = useState(null);
+export default function AttemptAssignment() {
+  let { classroomCode, assignmentID } = useParams();
+  const [assignmentData, setAssignmentData] = useState(null);
+  const { token } = useAuth()
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [editorData, setEditorData] = useState([])
   const dialogRef = useRef(null)
   const [dialog, setDialog] = useState({
   })
   const [currentLanguage, setCurrentLanguage] = useState([])
-  const themeInfo = useTheme()
-  console.log({ themeInfo })
 
   const navigate = useNavigate()
 
 
-  async function fetchTestData() {
-    console.log("Fetching test data")
-    const response = await fetch("/api/instanttest/get", {
+  async function fetchAssignmentData() {
+    const response = await fetch("/api/assignment/get", {
       method: "POST",
       headers: {
-        "content": "application/json"
+        "content": "application/json",
+        "Authorization": token.toString()
       },
       body: JSON.stringify({
-        publicCode
+        classroomCode,
+        assignmentID: parseInt(assignmentID)
       }),
     })
     console.log("Fetch over")
@@ -69,15 +71,15 @@ export default function InstantTest() {
 
     if (responseJSON.error) {
       setDialog({
-        title: "Wrong Test Code",
-        description: "The Test Code Is Incorrect Or The Test Is Over. Please Try Again Or Contact Your Teacher.",
+        title: "An error occured",
+        description: "Please logout and login again. If this problem persists, please contact your teacher.",
         onOk: () => navigate("/")
       })
       dialogRef.current.click()
       return
     }
 
-    setTestData(responseJSON)
+    setAssignmentData(responseJSON)
     console.log(responseJSON)
 
     const tempEditorData = responseJSON.questions.map((question: any) => {
@@ -95,7 +97,10 @@ export default function InstantTest() {
 
 
   useEffect(() => {
-    fetchTestData()
+    if (token == null) {
+      navigate("/")
+    }
+    fetchAssignmentData()
   }, [])
 
 
@@ -137,7 +142,7 @@ export default function InstantTest() {
 
 
 
-  if (testData == null) return <div>Loading...</div>
+  if (assignmentData == null) return <div>Loading...</div>
 
   return (
     <div>
@@ -154,7 +159,7 @@ export default function InstantTest() {
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Language</SelectLabel>
-              {testData.questions[currentQuestionIndex].languages.map((language: string, index: number) => (
+              {assignmentData.questions[currentQuestionIndex].languages.map((language: string, index: number) => (
                 <SelectItem value={language} key={index}>{language.toUpperCase()}</SelectItem>
               )
               )
@@ -172,7 +177,7 @@ export default function InstantTest() {
         className="min-w-screen min-h-[95vh] rounded-lg border"
       >
         <ResizablePanel defaultSize={25}>
-          <QuestionsPanel testData={testData} currentQuestionIndex={currentQuestionIndex} setCurrentQuestionIndex={setCurrentQuestionIndex} />
+          <QuestionsPanel testData={assignmentData} currentQuestionIndex={currentQuestionIndex} setCurrentQuestionIndex={setCurrentQuestionIndex} />
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={75}>
@@ -181,8 +186,8 @@ export default function InstantTest() {
               <div className="flex flex-col items-center justify-center h-full">
                 <Editor
                   language={languageToEditorLanguageMapping[currentLanguage[currentQuestionIndex]]}
-                  value={testData == null ? "Loading..." : editorData[currentQuestionIndex]}
-                  theme={themeInfo.theme == "dark" ? "vs-dark" : "vs-light"}
+                  value={assignmentData == null ? "Loading..." : editorData[currentQuestionIndex]}
+                  theme="vs-dark"
                   className="resize-y overflow-auto"
                   onChange={(value: any) => {
                     const tempEditorData: any = editorData
@@ -194,7 +199,7 @@ export default function InstantTest() {
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={25}>
-              <TestCasePanel testData={testData} setTestData={setTestData} currentQuestionIndex={currentQuestionIndex} editorData={editorData} publicCode={publicCode} universityID={universityID} languages={currentLanguage} />
+              <AssignmentTestCasePanel assignmentData={assignmentData} setAssignmentData={setAssignmentData} currentQuestionIndex={currentQuestionIndex} editorData={editorData} languages={currentLanguage} assignmentID={parseInt(assignmentID)} />
             </ResizablePanel>
           </ResizablePanelGroup>
         </ResizablePanel>

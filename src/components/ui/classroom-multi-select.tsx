@@ -24,7 +24,7 @@ export function ClassroomMultiSelect({ availableClassrooms, onSelect, onUnselect
 
   const handleUnselect = React.useCallback((classroom: any) => {
     setSelected((prev) => prev.filter((s) => s.ID !== classroom.ID));
-    onUnselect(classroom.ID);
+    onUnselect(classroom);
   }, [onUnselect]);
 
   const handleKeyDown = React.useCallback(
@@ -50,7 +50,7 @@ export function ClassroomMultiSelect({ availableClassrooms, onSelect, onUnselect
   );
 
   const selectables = availableClassrooms.filter(
-    (classroom) => !selected.some((selClass) => selClass.ID === selClass.ID)
+    (classroom) => !selected.some((selClass) => selClass.ID === classroom.ID)
   );
 
 

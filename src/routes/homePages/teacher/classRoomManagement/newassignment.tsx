@@ -1,6 +1,6 @@
 import { useAuth } from "@/lib/authContext"
 import { useEffect } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { useRef } from "react"
 import { useState } from "react"
 // reuse the AI button css from instant test create test page
@@ -16,8 +16,13 @@ import { LanguageMultiSelect } from "@/components/ui/language-multi-select"
 export default function NewAssignmentPage() {
   const { token, login, logout } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const { classrooms } = location.state
   useEffect(() => {
     if (token == null) {
+      navigate("/")
+    }
+    if (classrooms == null) {
       navigate("/")
     }
   }, [])
@@ -601,7 +606,7 @@ export default function NewAssignmentPage() {
         <div className="mt-8 flex flex-col justify-start items-start space-y-3">
           <Button type="submit">Submit</Button>
           <Button type="button" variant="secondary" onClick={downloadTestData} className="">Download Test Data</Button>
-          <Button type="button" variant="outline" onClick={() => navigate("/")} className="">Go Back</Button>
+          <Button type="button" variant="outline" onClick={() => navigate(-1)} className="">Go Back</Button>
         </div>
       </form>
 
