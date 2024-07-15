@@ -74,7 +74,7 @@ export default function TestCasePanel({ testData, setTestData, currentQuestionIn
       body: JSON.stringify(payload)
     })
     const responseJSON = await response.json()
-    if (responseJSON.error) {
+    if (responseJSON.error || !response.ok) {
       setDialog({
         title: "Error",
         description: "An error occured: " + responseJSON.error,

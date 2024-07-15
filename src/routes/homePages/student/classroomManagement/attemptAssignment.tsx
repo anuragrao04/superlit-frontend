@@ -83,6 +83,8 @@ export default function AttemptAssignment() {
     console.log(responseJSON)
 
     const tempEditorData = responseJSON.questions.map((question: any) => {
+      const storedEditorData = localStorage.getItem(`question${question.ID}-${token.toString()}`)
+      if (storedEditorData) return storedEditorData
       return question.preWrittenCode
     })
 
@@ -192,6 +194,7 @@ export default function AttemptAssignment() {
                   onChange={(value: any) => {
                     const tempEditorData: any = editorData
                     tempEditorData[currentQuestionIndex] = value
+                    localStorage.setItem(`question${assignmentData.questions[currentQuestionIndex].ID}-${token.toString()}`, value)
                     setEditorData([...tempEditorData])
                   }}
                 />

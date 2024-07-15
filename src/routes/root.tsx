@@ -7,9 +7,42 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import InstantTestCode from "@/components/instantTestCode"
+import { useAuth } from "@/lib/authContext";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 export default function Root() {
+  const { token, logout } = useAuth()
+  const navigate = useNavigate()
+
+  async function redirectIfLoggedIn() {
+    if (token) {
+      const response = await fetch("/api/auth/isteacher", {
+        method: "GET",
+        headers: {
+          "Authorization": token.toString()
+        }
+      })
+      if (response.ok) {
+        let responseJSON = await response.json()
+        if (responseJSON.isTeacher) {
+          navigate("/home/teacher")
+        } else {
+          navigate("/home/student")
+        }
+      } else {
+        logout()
+      }
+    }
+  }
+
+  useEffect(() => {
+    redirectIfLoggedIn()
+  })
+
+  if (token) return <div className="w-screen h-screen">Redirecting...</div>
+
   return (
     <div className="flex justify-center items-start min-h-screen dark:bg-black pt-10">
       <Tabs defaultValue="instanttest" className="w-fit">

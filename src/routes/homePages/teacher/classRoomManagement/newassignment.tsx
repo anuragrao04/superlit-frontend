@@ -467,7 +467,6 @@ export default function NewAssignmentPage() {
                 onChange={(e) => handleQuestionChange(index, "preWrittenCode", e.target.value)}
                 rows={4}
                 className="font-mono"
-                required
               />
             </div>
 
@@ -514,7 +513,6 @@ export default function NewAssignmentPage() {
                         id={`example-input-${index}-${exampleIndex}`}
                         value={example.input}
                         onChange={(e) => handleExampleCaseChange(index, exampleIndex, "input", e.target.value)}
-                        required
                       />
                     </div>
                     <div>
@@ -545,7 +543,6 @@ export default function NewAssignmentPage() {
                         value={example.explanation}
                         onChange={(e) => handleExampleCaseChange(index, exampleIndex, "explanation", e.target.value)}
                         rows={2}
-                        required
                       />
                     </div>
                   </div>
@@ -566,7 +563,6 @@ export default function NewAssignmentPage() {
                         id={`test-input-${index}-${testIndex}`}
                         value={testCase.input}
                         onChange={(e) => handleTestCaseChange(index, testIndex, "input", e.target.value)}
-                        required
                       />
                     </div>
                     <div>

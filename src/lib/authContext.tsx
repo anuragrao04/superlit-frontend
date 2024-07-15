@@ -21,14 +21,20 @@ export const useAuth = () => useContext(AuthContext);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(() => {
+    // Check if there's a token stored in localStorage
+    const storedToken = localStorage.getItem('authToken');
+    return storedToken ? storedToken : null;
+  });
 
   const login = (token: string) => {
     setToken(token);
+    localStorage.setItem('authToken', token);
   };
 
   const logout = () => {
     setToken(null);
+    localStorage.clear()
   };
 
 

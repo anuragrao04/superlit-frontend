@@ -16,6 +16,7 @@ import ClassRoomManagement from "./routes/homePages/teacher/classRoomManagement/
 import NewAssignmentPage from "./routes/homePages/teacher/classRoomManagement/newassignment.tsx";
 import StudentClassroomManagement from "./routes/homePages/student/classroomManagement/classroomManagement.tsx";
 import AttemptAssignment from "./routes/homePages/student/classroomManagement/attemptAssignment.tsx";
+import ViewScore from "./routes/homePages/teacher/classRoomManagement/viewScore.tsx";
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
   {
     path: "/home/teacher/classroom/:classRoomCode",
     element: <ClassRoomManagement />
+  },
+  {
+    path: "/home/teacher/classroom/:classroomCode/assignment/:assignmentID/scores",
+    element: <ViewScore />
   },
 
   {

@@ -53,14 +53,13 @@ export default function SignInForm() {
       body: JSON.stringify(formData)
     })
 
-    const responseJson = await response.json()
-    console.log(responseJson)
-    if (responseJson.error) {
+    if (response.status != 200) {
       setDialog({
         title: "Error",
-        description: responseJson.error
+        description: "Something went wrong. Please try again"
       })
     } else {
+      const responseJson = await response.json()
       // redirect to /home with props 'userData' being the response we just received
       login(responseJson.token)
       if (responseJson.isTeacher) {
