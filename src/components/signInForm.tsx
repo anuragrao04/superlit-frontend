@@ -6,6 +6,7 @@ import { useState, useRef } from "react"
 import AlertDialogWrapper from "./ui/alertDialogWrapper"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "@/lib/authContext"
+import { Link } from "react-router-dom"
 
 export default function SignInForm() {
   const navigate = useNavigate()
@@ -74,7 +75,7 @@ export default function SignInForm() {
 
   return (
     <div className="">
-      <div className="mx-auto max-w-lg space-y-6 py-12 px-7 dark:bg-gray-800 dark:text-gray-50 rounded-md">
+      <div className="mx-auto max-w-lg space-y-6 py-12 px-7 bg-gray-200 dark:bg-gray-800 dark:text-gray-50 rounded-md">
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold">Welcome to Superlit <img src="rocket.png" width="30" className="inline"></img></h1>
           <p className="text-gray-500 dark:text-gray-400">Enter your credentials to sign in</p>
@@ -108,6 +109,8 @@ export default function SignInForm() {
                 type="password"
               />
             </div>
+
+            <Link to="/forgotpassword">Forgot Password?</Link>
           </CardContent>
           <CardFooter>
             <Button className="w-full dark:bg-gray-800 dark:text-gray-50 dark:hover:bg-gray-700" type="submit" onClick={handleSubmit}>

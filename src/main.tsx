@@ -19,6 +19,8 @@ import AttemptAssignment from "./routes/homePages/student/classroomManagement/at
 import ViewScore from "./routes/homePages/teacher/classRoomManagement/viewScore.tsx";
 import EditAssignmentPage from "./routes/homePages/teacher/classRoomManagement/editAssignment.tsx";
 import ViewScoreStudent from "./routes/homePages/student/classroomManagement/components/viewScoreStudent.tsx";
+import EnterUniIDForgotPassword from "./routes/forgotPassword/enterUniID.tsx";
+import ResetPassword from "./routes/forgotPassword/resetPassword.tsx";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +45,17 @@ const router = createBrowserRouter([
   }, {
     path: "/instantTest/create",
     element: <CreateTest />
+  },
+
+  // reset passwords
+  {
+    path: "/forgotpassword",
+    element: <EnterUniIDForgotPassword />
+  },
+
+  {
+    path: "/resetpassword/:jwtToken",
+    element: <ResetPassword />
   },
 
 

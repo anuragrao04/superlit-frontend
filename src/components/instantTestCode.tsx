@@ -41,7 +41,7 @@ export default function InstantTestCode() {
 
   return (
     <div>
-      <div className="mx-auto min-w-lg space-y-6 py-12 dark:bg-gray-800 dark:text-gray-50 rounded-md">
+      <div className="mx-auto min-w-lg space-y-6 py-12 bg-gray-200 dark:bg-gray-800 dark:text-gray-50 rounded-md">
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold">Welcome to Superlit <img src="rocket.png" width="30" className="inline"></img></h1>
           <p className="text-gray-500 dark:text-gray-400">Input the 6 digit test code to get started</p>

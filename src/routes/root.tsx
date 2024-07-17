@@ -46,7 +46,7 @@ export default function Root() {
   return (
     <div className="flex justify-center items-start min-h-screen dark:bg-black pt-10">
       <Tabs defaultValue="instanttest" className="w-fit">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-3 bg-gray-200 dark:bg-gray-800">
           <TabsTrigger value="signin">Sign In</TabsTrigger>
           <TabsTrigger value="signup">Sign Up</TabsTrigger>
           <TabsTrigger value="instanttest">Instant Test</TabsTrigger>
