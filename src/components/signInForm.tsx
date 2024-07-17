@@ -33,7 +33,6 @@ export default function SignInForm() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
-
     if (formData.universityID === "" || formData.password === "") {
       setDialog({
         title: "Empty Fields",
@@ -54,20 +53,31 @@ export default function SignInForm() {
       body: JSON.stringify(formData)
     })
 
-    if (response.status != 200) {
+    let responseJson
+    try {
+      responseJson = await response.json()
+    } catch (e) {
       setDialog({
-        title: "Error",
-        description: "Something went wrong. Please try again"
+        title: "An error occured",
+        description: "Please try again later"
       })
+      dialogRef.current.click()
+      return
+    }
+    if (responseJson.error == "User does not exist") {
+      setDialog({
+        title: "Wrong Credentials",
+        description: "Please verify that the university ID and password is correct. If you're sure, you can try the forgot password option"
+      })
+      dialogRef.current.click()
+      return
+    }
+    // redirect to /home with props 'userData' being the response we just received
+    login(responseJson.token)
+    if (responseJson.isTeacher) {
+      navigate("/home/teacher")
     } else {
-      const responseJson = await response.json()
-      // redirect to /home with props 'userData' being the response we just received
-      login(responseJson.token)
-      if (responseJson.isTeacher) {
-        navigate("/home/teacher")
-      } else {
-        navigate("/home/student")
-      }
+      navigate("/home/student")
     }
     dialogRef.current.click()
   }
@@ -118,8 +128,6 @@ export default function SignInForm() {
             </Button>
           </CardFooter>
         </Card>
-
-
 
         {/* alert dialog */}
         <AlertDialogWrapper dialog={dialog} dialogRef={dialogRef} />

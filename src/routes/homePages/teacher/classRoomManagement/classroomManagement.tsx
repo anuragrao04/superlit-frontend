@@ -58,6 +58,7 @@ export default function ClassRoomManagement() {
       <div className="max-w-7xl mx-auto py-10 px-6 space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">{classroomData.name}</h1>
+          <div className="text-xl">Assignments</div>
         </div>
         <div className="relative w-full overflow-auto">
           {
