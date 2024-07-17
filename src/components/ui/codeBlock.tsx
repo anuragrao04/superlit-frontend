@@ -1,11 +1,7 @@
 export default function CodeBlock({ code, className }: { code: string, className: string }) {
   return (
-    <div className={"rounded-sm bg-gray-800 text-white p-2 m-2 w-full h-full overflow-x-scroll" + className} >
-      <pre>
-        <code>
-          {code}
-        </code>
-      </pre>
-    </div>
+    <pre className="bg-gray-300 dark:bg-gray-700 p-4 rounded-md text-sm font-mono">
+      <code>{code}</code>
+    </pre>
   )
 }

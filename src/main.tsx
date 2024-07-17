@@ -17,6 +17,8 @@ import NewAssignmentPage from "./routes/homePages/teacher/classRoomManagement/ne
 import StudentClassroomManagement from "./routes/homePages/student/classroomManagement/classroomManagement.tsx";
 import AttemptAssignment from "./routes/homePages/student/classroomManagement/attemptAssignment.tsx";
 import ViewScore from "./routes/homePages/teacher/classRoomManagement/viewScore.tsx";
+import EditAssignmentPage from "./routes/homePages/teacher/classRoomManagement/editAssignment.tsx";
+import ViewScoreStudent from "./routes/homePages/student/classroomManagement/components/viewScoreStudent.tsx";
 
 const router = createBrowserRouter([
   {
@@ -62,6 +64,10 @@ const router = createBrowserRouter([
     path: "/home/teacher/classroom/:classroomCode/assignment/:assignmentID/scores",
     element: <ViewScore />
   },
+  {
+    path: "/home/teacher/classroom/:classroomCode/assignment/:assignmentID/edit",
+    element: <EditAssignmentPage />
+  },
 
   {
     path: "/home/student",
@@ -70,9 +76,14 @@ const router = createBrowserRouter([
   {
     path: "/home/student/classroom/:classroomCode",
     element: <StudentClassroomManagement />
-  }, {
+  },
+  {
     path: "/home/student/classroom/:classroomCode/assignment/:assignmentID/attempt",
     element: <AttemptAssignment />
+  },
+  {
+    path: "/home/student/classroom/:classroomCode/assignment/:assignmentID/scores",
+    element: <ViewScoreStudent />
   },
   // 404 path
   {

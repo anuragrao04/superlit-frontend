@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input"
 
 export default function ClassroomCard({ name, code }: { name: string, code: string }) {
   return (
-    <div className="bg-white dark:bg-gray-800 shadow-md p-5 flex flex-col items-center justify-center space-y-5 rounded-lg hover:outline transition-all cursor-pointer select-none">
+    <div className="bg-white dark:bg-gray-800 h-full w-full shadow-md p-5 flex flex-col items-center justify-center space-y-5 rounded-lg hover:outline transition-all cursor-pointer select-none">
       <div className="text-3xl font-bold">{name}</div>
       <div className="text-xl font-bold text-gray-700 dark:text-gray-100">Joining Code: <span className="font-mono">{code}</span></div>
     </div>
@@ -62,7 +62,7 @@ export function CreateClassroomCard({ token, dialogRef, setDialog, fetchUserData
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <div className="bg-white dark:bg-gray-800 shadow-md p-5 flex flex-col items-center justify-center space-y-5 rounded-lg hover:outline transition-all cursor-pointer select-none" onClick={createClassroom}>
+        <div className="bg-white dark:bg-gray-800 h-full w-full shadow-md p-5 flex flex-col items-center justify-center space-y-5 rounded-lg hover:outline transition-all cursor-pointer select-none" onClick={createClassroom}>
           <div className="text-5xl font-bold">+</div>
           <div className="text-xl font-bold text-gray-700 dark:text-gray-100">Create New Classroom</div>
         </div>
@@ -125,7 +125,7 @@ export function JoinClassroomCard({ token, dialogRef, setDialog, fetchUserData }
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <div className="bg-white dark:bg-gray-800 shadow-md p-5 flex flex-col items-center justify-center space-y-5 rounded-lg hover:outline transition-all cursor-pointer select-none" onClick={createClassroom}>
+        <div className="bg-white dark:bg-gray-800 h-full w-full shadow-md p-5 flex flex-col items-center justify-center space-y-5 rounded-lg hover:outline transition-all cursor-pointer select-none" onClick={createClassroom}>
           <div className="text-5xl font-bold">+</div>
           <div className="text-xl font-bold text-gray-700 dark:text-gray-100">Join A Classroom</div>
         </div>

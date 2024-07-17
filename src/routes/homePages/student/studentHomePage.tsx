@@ -51,7 +51,7 @@ export default function StudentHomePage() {
 
   return (
     <div className="h-screen w-screen overflow-hidden">
-      <div className="h-[5vh] w-full bg-gray-100 dark:bg-gray-900 flex justify-between">
+      <div className="h-[5vh] w-full bg-gray-200 dark:bg-gray-900 flex justify-between">
         <SuperlitLogo />
         <div className="flex items-center justify-center space-x-2 mr-5">
           <div>{userData.name + " [" + userData.universityID + "]"}</div>
@@ -64,7 +64,7 @@ export default function StudentHomePage() {
 
 
 
-      <div className="h-[95vh] flex justify-center items-center">
+      <div className="h-[95vh] flex justify-center items-center bg-gray-100 dark:bg-gray-900">
         <div className="grid" style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, minmax(0, 1fr))",

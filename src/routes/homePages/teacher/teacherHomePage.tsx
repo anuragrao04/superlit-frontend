@@ -62,7 +62,7 @@ export default function TeacherHomePage() {
 
 
 
-      <div className="h-[95vh] flex flex-col justify-between items-center p-5">
+      <div className="h-[95vh] flex flex-col justify-between items-center p-5 bg-gray-100 dark:bg-gray-900">
         <div className="grid" style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
@@ -70,7 +70,11 @@ export default function TeacherHomePage() {
         }}>
 
           {userData == null ? 'loading...' : userData.classrooms.map((classroom: any, index: number) => (
-            <div onClick={() => navigate("/home/teacher/classroom/" + classroom.code)} key={index}>
+            <div onClick={() => navigate("/home/teacher/classroom/" + classroom.code, {
+              state: {
+                classrooms: userData.classrooms
+              }
+            })} key={index}>
               <ClassroomCard name={classroom.name} code={classroom.code} />
             </div>
           ))
@@ -81,7 +85,7 @@ export default function TeacherHomePage() {
         </div>
 
         <div className="w-full flex justify-end items-center">
-          <Button onClick={() => navigate(`/home/teacher/classroom/assignment/newassignment`, {
+          <Button className="text-xl" onClick={() => navigate(`/home/teacher/classroom/assignment/newassignment`, {
             state: {
               classrooms: userData.classrooms
             }

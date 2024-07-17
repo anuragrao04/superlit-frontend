@@ -1,6 +1,6 @@
 import { useAuth } from "@/lib/authContext"
 import { useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
 
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
@@ -8,6 +8,10 @@ import { Button } from "@/components/ui/button"
 
 export default function ClassRoomManagement() {
   let { classRoomCode } = useParams()
+  const location = useLocation()
+  const { classrooms } = location.state
+  // this is the list of classrooms the teacher is part of
+  // it is used to pass information to the edit page
   const [classroomData, setClassroomData] = useState(null)
   const { token, logout } = useAuth()
   const navigate = useNavigate()
@@ -84,7 +88,11 @@ export default function ClassRoomManagement() {
                         </TableCell>
                         <TableCell>
                           <Button onClick={() => {
-                            navigate(`/home/teacher/classroom/${classRoomCode}/assignment/${assignment.ID}/edit`)
+                            navigate(`/home/teacher/classroom/${classRoomCode}/assignment/${assignment.ID}/edit`, {
+                              state: {
+                                classrooms
+                              }
+                            })
                           }}>
                             Edit
                           </Button>

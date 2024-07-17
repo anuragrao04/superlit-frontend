@@ -25,6 +25,7 @@ import AssignmentTestCasePanel from "./components/testCasePanel";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/lib/authContext";
+import { useTheme } from "@/components/theme-provider";
 
 loader.config({
   monaco,
@@ -50,6 +51,7 @@ export default function AttemptAssignment() {
   })
   const [currentLanguage, setCurrentLanguage] = useState([])
 
+  const themeInfo = useTheme()
   const navigate = useNavigate()
 
 
@@ -189,7 +191,7 @@ export default function AttemptAssignment() {
                 <Editor
                   language={languageToEditorLanguageMapping[currentLanguage[currentQuestionIndex]]}
                   value={assignmentData == null ? "Loading..." : editorData[currentQuestionIndex]}
-                  theme="vs-dark"
+                  theme={themeInfo.theme == "dark" ? "vs-dark" : "vs-light"}
                   className="resize-y overflow-auto"
                   onChange={(value: any) => {
                     const tempEditorData: any = editorData

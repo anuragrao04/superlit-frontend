@@ -1,6 +1,6 @@
 import { useAuth } from "@/lib/authContext"
 import { useEffect } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { useRef } from "react"
 import { useState } from "react"
 // reuse the AI button css from instant test create test page
@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { LanguageMultiSelect } from "@/components/ui/language-multi-select"
 
-export default function NewAssignmentPage() {
+export default function EditAssignmentPage() {
   const { token, login, logout } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
@@ -21,16 +21,87 @@ export default function NewAssignmentPage() {
   useEffect(() => {
     if (token == null) {
       navigate("/")
+      return
     }
     if (classrooms == null) {
       navigate("/")
+      return
     }
+    if (assignmentID == null) {
+      console.log("Assignment ID null")
+      navigate(-1)
+      return
+    }
+    fetchData()
   }, [])
 
 
   const dialogRef = useRef(null)
   const formRef = useRef(null)
   const fileUploadRef = useRef(null)
+  const { classroomCode, assignmentID } = useParams()
+
+  async function fetchData() {
+    console.log("sending: ", { assignmentID: parseInt(assignmentID) })
+    const response = await fetch("/api/assignment/getforedit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": token.toString()
+      },
+      body: JSON.stringify({
+        assignmentID: parseInt(assignmentID)
+      })
+
+    })
+
+    if (!response.ok) {
+      setDialog({
+        title: "Error",
+        description: "Something went wrong. Try again later",
+        onOk: () => navigate(-1)
+      })
+
+      dialogRef.current.click()
+      return
+    }
+
+    const responseJSON = await response.json()
+
+    if (responseJSON.error) {
+      setDialog({
+        title: "Error",
+        description: "Failed to fetch assignment. Please try again."
+      })
+      dialogRef.current.click()
+      return
+    }
+
+    // unformat the start end end dates
+    // the format the server sends is this:
+    // 2024-06-05T13:12:03.863679+05:30
+    // Gotta convert this to this:
+    // 2024-06-05T13:12
+    // because the input type datetime-local expects the latter format
+    function formatDateForDatetimeLocal(date: Date) {
+      let year = date.getFullYear();
+      let month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+      let day = String(date.getDate()).padStart(2, '0');
+      let hours = String(date.getHours()).padStart(2, '0');
+      let minutes = String(date.getMinutes()).padStart(2, '0');
+
+      // Format the date and time
+      let formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+      return formattedDate;
+    }
+
+    responseJSON.assignment.startTime = formatDateForDatetimeLocal(new Date(responseJSON.assignment.startTime))
+    responseJSON.assignment.endTime = formatDateForDatetimeLocal(new Date(responseJSON.assignment.endTime))
+    setFormData(responseJSON.assignment)
+  }
+
+
   const [dialog, setDialog] = useState({
     title: "",
     description: "",
@@ -81,11 +152,12 @@ export default function NewAssignmentPage() {
     dateString += ":00.00"
     const now = new Date();
     const timezoneOffset = now.getTimezoneOffset();
-
+    console.log(timezoneOffset)
     let sign = timezoneOffset > 0 ? '-' : '+';
-    let offsetHours = Math.abs(Math.floor(timezoneOffset / 60)).toString().padStart(2, '0');
-    let offsetMinutes = Math.abs(timezoneOffset % 60).toString().padStart(2, '0');
-    const formattedTimezoneOffset = `${sign}${offsetHours}:${offsetMinutes}`
+    let offsetHours = Math.floor(Math.abs(timezoneOffset) / 60);
+    let offsetMinutes = Math.abs(timezoneOffset) % 60;
+    const formattedTimezoneOffset = `${sign}${String(offsetHours).padStart(2, '0')}:${String(offsetMinutes).padStart(2, '0')}`
+    console.log(formattedTimezoneOffset)
     dateString += formattedTimezoneOffset
     return dateString
   }
@@ -349,17 +421,20 @@ export default function NewAssignmentPage() {
       dialogRef.current.click()
       return
     }
+    const formattedFormData = { ...formData }
 
-    formData.startTime = formatDate(formData.startTime)
-    formData.endTime = formatDate(formData.endTime)
+    formattedFormData.startTime = formatDate(formData.startTime)
+    formattedFormData.endTime = formatDate(formData.endTime)
 
-    const response = await fetch("/api/assignment/createassignment", {
+    console.log(formattedFormData)
+
+    const response = await fetch("/api/assignment/saveedited", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": token.toString(),
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify({ editedAssignment: formattedFormData }),
     })
     if (response.status == 401) {
       setDialog({
@@ -368,22 +443,19 @@ export default function NewAssignmentPage() {
       })
       dialogRef.current.click()
 
-      // unformat the date
-      formData.startTime = formData.startTime.slice(0, -6)
-      formData.endTime = formData.endTime.slice(0, -6)
       return
     }
     const responseJSON = await response.json()
     if (responseJSON.error) {
       setDialog({
         title: "Error",
-        description: "Failed to create assignment. Please try again."
+        description: "Failed to update assignment. Please try again."
       })
       dialogRef.current.click()
     } else {
       setDialog({
         title: "Success",
-        description: "Assignments created successfully"
+        description: "Assignments updated successfully"
       })
       dialogRef.current.click()
     }
@@ -392,7 +464,7 @@ export default function NewAssignmentPage() {
 
 
   return (
-    <div className="max-w-2xl mx-auto p-6 sm:p-8 bg-gray-100 dark:bg-gray-900">
+    <div className="max-w-2xl mx-auto p-6 sm:p-8">
       <div className="flex justify-between">
         <h1 className="text-3xl font-bold mb-6">Create Test</h1>
         <Button variant="outline" onClick={() => fileUploadRef.current.click()}>
@@ -420,15 +492,6 @@ export default function NewAssignmentPage() {
         <div className="mb-6">
           <Label htmlFor="endTime">End Time</Label>
           <Input type="datetime-local" id="endTime" name="endTime" value={formData.endTime} onChange={handleInputChange} required />
-        </div>
-
-        <div className="mb-4">
-          <Label htmlFor={`classroomIDs`}>Assign To Classrooms</Label>
-          <ClassroomMultiSelect
-            availableClassrooms={classrooms}
-            onSelect={(classroom) => handleClassroomSelect(classroom)}
-            onUnselect={(classroom) => handleClassroomUnselect(classroom)}
-          />
         </div>
 
         {formData.questions.map((question, index) => (
