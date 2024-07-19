@@ -30,7 +30,7 @@ import { useTheme } from "@/components/theme-provider";
 loader.config({
   monaco,
 });
-// This enables monaco editor to use node_modules instead of a CDN. 
+// This enables monaco editor to use node_modules instead of a CDN.
 // This enables our app to be fully offline and hosted on a local network
 
 loader.init()

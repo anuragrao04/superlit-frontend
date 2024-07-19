@@ -75,7 +75,7 @@ export default function TeacherHomePage() {
                 classrooms: userData.classrooms
               }
             })} key={index}>
-              <ClassroomCard name={classroom.name} code={classroom.code} />
+              <ClassroomCard name={classroom.name} code={classroom.code} teacherCode={classroom.teacherCode} />
             </div>
           ))
           }

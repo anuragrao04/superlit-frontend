@@ -81,11 +81,12 @@ export default function NewAssignmentPage() {
     dateString += ":00.00"
     const now = new Date();
     const timezoneOffset = now.getTimezoneOffset();
-
+    console.log(timezoneOffset)
     let sign = timezoneOffset > 0 ? '-' : '+';
-    let offsetHours = Math.abs(Math.floor(timezoneOffset / 60)).toString().padStart(2, '0');
-    let offsetMinutes = Math.abs(timezoneOffset % 60).toString().padStart(2, '0');
-    const formattedTimezoneOffset = `${sign}${offsetHours}:${offsetMinutes}`
+    let offsetHours = Math.floor(Math.abs(timezoneOffset) / 60);
+    let offsetMinutes = Math.abs(timezoneOffset) % 60;
+    const formattedTimezoneOffset = `${sign}${String(offsetHours).padStart(2, '0')}:${String(offsetMinutes).padStart(2, '0')}`
+    console.log(formattedTimezoneOffset)
     dateString += formattedTimezoneOffset
     return dateString
   }

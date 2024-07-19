@@ -1,4 +1,4 @@
-import { useRef } from "react"
+import { useRef, useState } from "react"
 
 import {
   AlertDialog,
@@ -13,13 +13,21 @@ import {
 } from "@/components/ui/alertDialog"
 
 import { Input } from "@/components/ui/input"
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-6-digit"
 
-export default function ClassroomCard({ name, code }: { name: string, code: string }) {
+export default function ClassroomCard({ name, code, teacherCode }: { name: string, code: string, teacherCode: string }) {
   return (
     <div className="bg-white dark:bg-gray-800 h-full w-full shadow-md p-5 flex flex-col items-center justify-center space-y-5 rounded-lg hover:outline transition-all cursor-pointer select-none">
       <div className="text-3xl font-bold">{name}</div>
-      <div className="text-xl font-bold text-gray-700 dark:text-gray-100">Joining Code: <span className="font-mono">{code}</span></div>
-    </div>
+      <div className="text-xl font-bold text-gray-700 dark:text-gray-100">Student Joining Code: <span className="font-mono">{code}</span></div>
+      {teacherCode.length != 0 ? (
+        <div className="text-xl font-bold text-gray-700 dark:text-gray-100">Teacher Joining Code: <span className="font-mono">{teacherCode}</span></div>
+      ) : (
+        <>
+        </>
+      )
+      }
+    </div >
   )
 }
 
@@ -88,10 +96,8 @@ export function CreateClassroomCard({ token, dialogRef, setDialog, fetchUserData
 
 export function JoinClassroomCard({ token, dialogRef, setDialog, fetchUserData }: { token: string, dialogRef: any, setDialog: any, fetchUserData: () => void }) {
 
-  const classroomCodeRef = useRef(null)
-
-  const createClassroom = async () => {
-    const classroomCode = classroomCodeRef.current.value
+  const [classroomCode, setClassroomCode] = useState("")
+  const joinClassroom = async () => {
     try {
       const response = await fetch("/api/classroom/adduser", {
         method: "POST",
@@ -125,7 +131,7 @@ export function JoinClassroomCard({ token, dialogRef, setDialog, fetchUserData }
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <div className="bg-white dark:bg-gray-800 h-full w-full shadow-md p-5 flex flex-col items-center justify-center space-y-5 rounded-lg hover:outline transition-all cursor-pointer select-none" onClick={createClassroom}>
+        <div className="bg-white dark:bg-gray-800 h-full w-full shadow-md p-5 flex flex-col items-center justify-center space-y-5 rounded-lg hover:outline transition-all cursor-pointer select-none">
           <div className="text-5xl font-bold">+</div>
           <div className="text-xl font-bold text-gray-700 dark:text-gray-100">Join A Classroom</div>
         </div>
@@ -134,11 +140,23 @@ export function JoinClassroomCard({ token, dialogRef, setDialog, fetchUserData }
         <AlertDialogHeader>
           <AlertDialogTitle>Enter classroom code</AlertDialogTitle>
           <AlertDialogDescription>
-            <Input type="text" placeholder="Enter Code Here" ref={classroomCodeRef}></Input>
+            <InputOTP maxLength={6} value={classroomCode} onChange={(value) => setClassroomCode(value)}>
+              <InputOTPGroup>
+                <InputOTPSlot index={0} />
+                <InputOTPSlot index={1} />
+                <InputOTPSlot index={2} />
+              </InputOTPGroup>
+              <InputOTPSeparator />
+              <InputOTPGroup>
+                <InputOTPSlot index={3} />
+                <InputOTPSlot index={4} />
+                <InputOTPSlot index={5} />
+              </InputOTPGroup>
+            </InputOTP>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction onClick={createClassroom}>Join Classroom</AlertDialogAction>
+          <AlertDialogAction onClick={joinClassroom}>Join Classroom</AlertDialogAction>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
