@@ -11,12 +11,14 @@ import AlertDialogWrapper from "@/components/ui/alertDialogWrapper"
 
 import { useRef, useState } from "react"
 import { useAuth } from "@/lib/authContext"
+import { useNavigate } from "react-router-dom"
 
 
 export default function AssignmentTestCasePanel({ assignmentData, setAssignmentData, currentQuestionIndex, editorData, assignmentID, languages }: { assignmentData: any, setAssignmentData: any, editorData: any, currentQuestionIndex: any, assignmentID: number, languages: string[] }) {
   const dialogRef = useRef(null)
   const [dialog, setDialog] = useState({})
   const { token } = useAuth()
+  const navigate = useNavigate()
   const handleRun = async () => {
     let tempOutputs: string[] = []
     await Promise.all(assignmentData.questions[currentQuestionIndex].exampleCases.map(async (testCase: any, index: any) => {
@@ -57,6 +59,61 @@ export default function AssignmentTestCasePanel({ assignmentData, setAssignmentD
       return newAssignmentData
     })
   }
+
+
+  async function getHint() {
+    const response = await fetch("/api/AIHint", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        code: editorData[currentQuestionIndex],
+        language: languages[currentQuestionIndex],
+        questionID: assignmentData.questions[currentQuestionIndex].ID
+      })
+    })
+
+    let responseJSON
+    try {
+      responseJSON = await response.json()
+    } catch {
+      setDialog({
+        title: "An error occured",
+        description: "Please try again. If this problem persists, please contact your teacher.",
+      })
+      dialogRef.current.click()
+      return
+    }
+
+    if (responseJSON.error) {
+      setDialog({
+        title: "An error occured",
+        description: "Error: " + responseJSON.error,
+      })
+      dialogRef.current.click()
+      return
+    }
+
+    setDialog({
+      title: "Your Hint",
+      description: responseJSON.hint,
+    })
+    dialogRef.current.click()
+  }
+
+  const handleEndTest = () => {
+    // add other logic in the future
+    setDialog({
+      title: "Are you sure?",
+      description: "You will not be able to submit your code after this. Are you sure you want to end the test?",
+      okText: "No, Go Back",
+      cancelText: "Yes, End Test",
+      onCancel: () => { navigate(-1) }
+    })
+    dialogRef.current.click()
+  }
+
 
   const handleSubmit = async () => {
     console.log("submitting!")
@@ -114,6 +171,12 @@ export default function AssignmentTestCasePanel({ assignmentData, setAssignmentD
                   </TabsList>
 
                   <div className="flex justify-end items-end m-1">
+                    <Button className="mx-2" variant="destructive" onClick={handleEndTest}>
+                      End Test
+                    </Button>
+                    <Button className="mx-2" variant="default" onClick={getHint}>
+                      AI Hint
+                    </Button>
                     <Button className="mx-2" variant="secondary" onClick={handleRun}>
                       Run
                     </Button>

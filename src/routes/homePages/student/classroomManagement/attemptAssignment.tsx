@@ -55,6 +55,7 @@ export default function AttemptAssignment() {
   const navigate = useNavigate()
 
 
+
   async function fetchAssignmentData() {
     const response = await fetch("/api/assignment/get", {
       method: "POST",

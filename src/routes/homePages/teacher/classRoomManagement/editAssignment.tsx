@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { LanguageMultiSelect } from "@/components/ui/language-multi-select"
+import BackButton from "@/components/backButton"
 
 export default function EditAssignmentPage() {
   const { token, login, logout } = useAuth()
@@ -466,7 +467,12 @@ export default function EditAssignmentPage() {
   return (
     <div className="max-w-2xl mx-auto p-6 sm:p-8">
       <div className="flex justify-between">
-        <h1 className="text-3xl font-bold mb-6">Create Test</h1>
+
+        <div className="flex items-center justify-center mb-5">
+          <BackButton />
+          <h1 className="text-3xl font-bold ml-3">Create Test</h1>
+        </div>
+
         <Button variant="outline" onClick={() => fileUploadRef.current.click()}>
           <input type="file" accept=".json" onChange={handleFileUpload} className="hidden" ref={fileUploadRef}>
           </input>

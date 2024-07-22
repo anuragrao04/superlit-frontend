@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { LanguageMultiSelect } from "@/components/ui/language-multi-select"
+import BackButton from "@/components/backButton"
 
 export default function NewAssignmentPage() {
   const { token, login, logout } = useAuth()
@@ -284,7 +285,10 @@ export default function NewAssignmentPage() {
       return
     }
 
-    const blob = new Blob([JSON.stringify(formData)], { type: 'application/json' });
+    let formDataFormatted = { ...formData }
+    formDataFormatted.classroomIDs = []
+
+    const blob = new Blob([JSON.stringify(formDataFormatted)], { type: 'application/json' });
 
     // Create an anchor element and trigger a download
     const a = document.createElement('a');
@@ -351,8 +355,10 @@ export default function NewAssignmentPage() {
       return
     }
 
-    formData.startTime = formatDate(formData.startTime)
-    formData.endTime = formatDate(formData.endTime)
+    let formattedFormData = { ...formData }
+
+    formattedFormData.startTime = formatDate(formData.startTime)
+    formattedFormData.endTime = formatDate(formData.endTime)
 
     const response = await fetch("/api/assignment/createassignment", {
       method: "POST",
@@ -360,7 +366,7 @@ export default function NewAssignmentPage() {
         "Content-Type": "application/json",
         "Authorization": token.toString(),
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(formattedFormData),
     })
     if (response.status == 401) {
       setDialog({
@@ -369,9 +375,6 @@ export default function NewAssignmentPage() {
       })
       dialogRef.current.click()
 
-      // unformat the date
-      formData.startTime = formData.startTime.slice(0, -6)
-      formData.endTime = formData.endTime.slice(0, -6)
       return
     }
     const responseJSON = await response.json()
@@ -395,7 +398,10 @@ export default function NewAssignmentPage() {
   return (
     <div className="max-w-2xl mx-auto p-6 sm:p-8 bg-gray-100 dark:bg-gray-900">
       <div className="flex justify-between">
-        <h1 className="text-3xl font-bold mb-6">Create Test</h1>
+        <div className="flex items-center justify-center mb-5">
+          <BackButton />
+          <h1 className="text-3xl font-bold ml-3">Create Test</h1>
+        </div>
         <Button variant="outline" onClick={() => fileUploadRef.current.click()}>
           <input type="file" accept=".json" onChange={handleFileUpload} className="hidden" ref={fileUploadRef}>
           </input>

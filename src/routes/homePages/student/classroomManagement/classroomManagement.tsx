@@ -5,6 +5,7 @@ import { useEffect } from "react"
 
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
+import BackButton from "@/components/backButton"
 
 export default function StudentClassroomManagement() {
   let { classroomCode } = useParams()
@@ -53,6 +54,7 @@ export default function StudentClassroomManagement() {
     <div className="w-screen min-h-screen bg-gray-100 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto py-10 px-6 space-y-6">
         <div className="flex items-center justify-between">
+          <BackButton />
           <h1 className="text-3xl font-bold">{classroomData.name}</h1>
         </div>
 

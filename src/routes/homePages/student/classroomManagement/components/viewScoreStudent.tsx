@@ -1,3 +1,4 @@
+import BackButton from "@/components/backButton";
 import AlertDialogWrapper from "@/components/ui/alertDialogWrapper";
 import CodeBlock from "@/components/ui/codeBlock";
 import { useAuth } from "@/lib/authContext";
@@ -99,6 +100,11 @@ export default function ViewScoreStudent() {
 
   return (
     <div className="flex flex-col w-full min-h-screen bg-gray-100 dark:bg-gray-900 p-5 px-32">
+
+      <div className="flex items-center justify-between">
+        <BackButton />
+        <h1 className="text-3xl font-bold">Your Scores</h1>
+      </div>
       {submissionData.answers.map((submission: Answer, index: number) => {
         if (!submission.attempted) return (
           <div key={index} className="shadow-sm bg-gray-200 dark:bg-gray-800 p-5 rounded-md my-5">
