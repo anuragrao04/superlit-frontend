@@ -58,6 +58,12 @@ interface answerSubmission {
   studentsCode: string
 }
 
+interface student {
+  universityID: string
+  name: string
+  ID: number
+}
+
 interface responseFormat {
   submissions: {
     universityID: string
@@ -66,6 +72,7 @@ interface responseFormat {
   }[]
   maxNumberOfQuestions: number
   questionNumberArray: number[]
+  blacklistedStudents: student[]
 }
 
 
@@ -122,7 +129,55 @@ export default function ViewScore() {
     fetchData()
   }, [])
 
+  async function excuseStudent(studentID: number) {
+    const response = await fetch("/api/assignment/excusestudent", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application",
+        "Authorization": token.toString(),
+      },
+      body: JSON.stringify({
+        studentID: studentID,
+        assignmentID: parseInt(assignmentID)
+      })
+    }
+    )
+    let responseJSON
 
+    try {
+      responseJSON = await response.json()
+    } catch {
+      setDialog({
+        title: "Error",
+        description: "Failed to excuse student. Please try again."
+      })
+      dialogRef.current.click()
+      return
+    }
+
+    if (responseJSON.error) {
+      setDialog({
+        title: "Error",
+        description: "Failed to excuse student. Please try again. Error: " + responseJSON.error
+      })
+      dialogRef.current.click()
+      return
+    }
+
+    setDialog({
+      title: "Success",
+      description: "Student excused successfully"
+    })
+    dialogRef.current.click()
+
+    // delete the student from the list
+    // This is done so that the student is removed from the list without having to refetch the data
+    setScores((prev) => {
+      if (prev == null) return prev
+      prev.blacklistedStudents = prev.blacklistedStudents.filter((student) => student.ID !== studentID)
+      return prev
+    })
+  }
 
   function handleAIVerify() {
     const response = fetch("/api/assignment/aiverify", {
@@ -223,6 +278,33 @@ export default function ViewScore() {
           <Button onClick={downloadCSV} className="m-2">Download as CSV</Button>
           <PopulateSheet assignmentID={assignmentID} token={token.toString()} setDialog={setDialog} dialogRef={dialogRef} />
           <Button onClick={handleAIVerify} className="m-2">Verify With AI</Button>
+
+
+          {scores?.blacklistedStudents.length === 0 ? <></> : (
+            <div>
+              <h1 className="text-2xl font-bold my-5 text-red-500">Cheating Students</h1>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>University ID</TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Excuse</TableHead>
+                  </TableRow>
+                </TableHeader>
+
+                <TableBody>
+                  {scores?.blacklistedStudents.map((student: student) => (
+                    <TableRow>
+                      <TableCell>{student.universityID}</TableCell>
+                      <TableCell>{student.name}</TableCell>
+                      <TableCell><Button onClick={() => excuseStudent(student.ID)}>Excuse</Button></TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+
         </div>
       </div>
 

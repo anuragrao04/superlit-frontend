@@ -46,6 +46,7 @@ export default function AttemptAssignment() {
   const { token } = useAuth()
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [editorData, setEditorData] = useState([])
+  let cheatingCount = 0
   const dialogRef = useRef(null)
   const [dialog, setDialog] = useState({
   })
@@ -70,9 +71,29 @@ export default function AttemptAssignment() {
     })
     console.log("Fetch over")
 
-    const responseJSON = await response.json()
+    let responseJSON
+    try {
+      responseJSON = await response.json()
+    } catch {
+      setDialog({
+        title: "An error occured",
+        description: "Please logout and login again. If this problem persists, please contact your teacher.",
+        onOk: () => navigate("/")
+      })
+      dialogRef.current.click()
+      return
+    }
 
     if (responseJSON.error) {
+      if (responseJSON.error == "You are blacklisted from this assignment") {
+        setDialog({
+          title: "You have been disqualified",
+          description: "You have been disqualified from the test. Please contact your teacher if you think this is a mistake.",
+          onOk: () => navigate("/")
+        })
+        dialogRef.current.click()
+        return
+      }
       setDialog({
         title: "An error occured",
         description: "Please logout and login again. If this problem persists, please contact your teacher.",
@@ -126,12 +147,36 @@ export default function AttemptAssignment() {
       dialogRef.current.click()
     };
 
+
     const handleCheater = () => {
+      if (cheatingCount >= 3) {
+        fetch("/api/assignment/addstudenttoblacklist", {
+          method: "POST",
+          headers: {
+            "content": "application/json",
+            "Authorization": token.toString()
+          },
+          body: JSON.stringify({
+            assignmentID: parseInt(assignmentID)
+          })
+        })
+
+        setDialog({
+          title: "You have been disqualified",
+          description: "You have been disqualified from the test for cheating. Please contact your teacher if you think this is a mistake.",
+          onOk: () => navigate("/")
+        })
+        dialogRef.current.click()
+        return
+      }
+
+      cheatingCount += 1
       setDialog({
         title: "No cheating!",
-        description: "You are not allowed to cheat. Please stay on the test page. If you leave, your test will be submitted and you will get 0 points. If you think this is a mistake, please contact your teacher.",
+        description: `You are not allowed to cheat. Please stay on the test page. If you leave, your test will be submitted and you will get 0 points. You have ${3 - cheatingCount} chance(s) left. If you think this is a mistake, please contact your teacher.`,
       })
       dialogRef.current.click()
+
     }
 
 
@@ -147,7 +192,7 @@ export default function AttemptAssignment() {
 
 
 
-  if (assignmentData == null) return <div>Loading...</div>
+  if (assignmentData == null) return <div className="w-screen h-screen flex justify-center items-center text-center"><AlertDialogWrapper dialog={dialog} dialogRef={dialogRef} />Loading...</div>
 
   return (
     <div>

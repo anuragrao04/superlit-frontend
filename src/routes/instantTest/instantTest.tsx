@@ -43,6 +43,7 @@ export default function InstantTest() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [editorData, setEditorData] = useState([])
   const dialogRef = useRef(null)
+  let cheatingCount = 0
   const [dialog, setDialog] = useState({
   })
   const [currentLanguage, setCurrentLanguage] = useState([])
@@ -117,11 +118,24 @@ export default function InstantTest() {
     };
 
     const handleCheater = () => {
+
+      if (cheatingCount >= 3) {
+        setDialog({
+          title: "You have been disqualified",
+          description: "You have been disqualified from the test for cheating. Please contact your teacher if you think this is a mistake.",
+          onOk: () => navigate("/")
+        })
+        dialogRef.current.click()
+        return
+      }
+
+      cheatingCount += 1
       setDialog({
         title: "No cheating!",
-        description: "You are not allowed to cheat. Please stay on the test page. If you leave, your test will be submitted and you will get 0 points. If you think this is a mistake, please contact your teacher.",
+        description: `You are not allowed to cheat. Please stay on the test page. If you leave, your test will be submitted and you will get 0 points. You have ${3 - cheatingCount} chance(s) left. If you think this is a mistake, please contact your teacher.`,
       })
       dialogRef.current.click()
+
     }
 
 
