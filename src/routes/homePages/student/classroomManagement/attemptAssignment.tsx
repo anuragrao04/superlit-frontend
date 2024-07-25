@@ -46,8 +46,9 @@ export default function AttemptAssignment() {
   const { token } = useAuth()
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [editorData, setEditorData] = useState([])
-  let cheatingCount = 0
+  let cheatingCount: number
   const dialogRef = useRef(null)
+  const editorRef = useRef(null)
   const [dialog, setDialog] = useState({
   })
   const [currentLanguage, setCurrentLanguage] = useState([])
@@ -69,7 +70,6 @@ export default function AttemptAssignment() {
         assignmentID: parseInt(assignmentID)
       }),
     })
-    console.log("Fetch over")
 
     let responseJSON
     try {
@@ -104,7 +104,6 @@ export default function AttemptAssignment() {
     }
 
     setAssignmentData(responseJSON)
-    console.log(responseJSON)
 
     const tempEditorData = responseJSON.questions.map((question: any) => {
       const storedEditorData = localStorage.getItem(`question${question.ID}-${token.toString()}`)
@@ -117,8 +116,12 @@ export default function AttemptAssignment() {
     setCurrentLanguage(responseJSON.questions.map((question) => {
       return question.languages[0]
     }))
-    console.log(responseJSON)
   }
+
+
+  const handleEditorDidMount = (editor: any, monaco: any) => {
+    editorRef.current = editor;
+  };
 
 
 
@@ -126,6 +129,7 @@ export default function AttemptAssignment() {
     if (token == null) {
       navigate("/")
     }
+    cheatingCount = parseInt(localStorage.getItem(`${assignmentID}-cheatingCount`)) || 0
     fetchAssignmentData()
   }, [])
 
@@ -148,8 +152,11 @@ export default function AttemptAssignment() {
     };
 
 
+
     const handleCheater = () => {
       if (cheatingCount >= 3) {
+        localStorage.removeItem(`${assignmentID}-cheatingCount`)
+
         fetch("/api/assignment/addstudenttoblacklist", {
           method: "POST",
           headers: {
@@ -171,6 +178,7 @@ export default function AttemptAssignment() {
       }
 
       cheatingCount += 1
+      localStorage.setItem(`${assignmentID}-cheatingCount`, cheatingCount)
       setDialog({
         title: "No cheating!",
         description: `You are not allowed to cheat. Please stay on the test page. If you leave, your test will be submitted and you will get 0 points. You have ${3 - cheatingCount} chance(s) left. If you think this is a mistake, please contact your teacher.`,
@@ -240,11 +248,24 @@ export default function AttemptAssignment() {
                   theme={themeInfo.theme == "dark" ? "vs-dark" : "vs-light"}
                   className="resize-y overflow-auto"
                   onChange={(value: any) => {
+                    const prevValue: string = editorData[currentQuestionIndex]
+                    const delta = value.length - prevValue.length
+                    console.log(value.length, prevValue.length, delta)
+                    if (delta > 100) {
+                      setDialog({
+                        title: "Copy Pastes",
+                        description: "Large copy pastes are not allowed.",
+                      })
+                      dialogRef.current.click()
+                      editorRef.current.setValue(prevValue)
+                      return
+                    }
                     const tempEditorData: any = editorData
                     tempEditorData[currentQuestionIndex] = value
                     localStorage.setItem(`question${assignmentData.questions[currentQuestionIndex].ID}-${token.toString()}`, value)
                     setEditorData([...tempEditorData])
                   }}
+                  onMount={handleEditorDidMount}
                 />
               </div>
             </ResizablePanel>

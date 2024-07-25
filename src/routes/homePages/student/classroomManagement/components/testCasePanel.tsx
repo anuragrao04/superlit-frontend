@@ -62,7 +62,7 @@ export default function AssignmentTestCasePanel({ assignmentData, setAssignmentD
 
 
   async function getHint() {
-    const response = await fetch("/api/AIHint", {
+    const response = await fetch("/api/aihint", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -116,7 +116,6 @@ export default function AssignmentTestCasePanel({ assignmentData, setAssignmentD
 
 
   const handleSubmit = async () => {
-    console.log("submitting!")
     const payload = {
       "code": editorData[currentQuestionIndex],
       "language": languages[currentQuestionIndex],

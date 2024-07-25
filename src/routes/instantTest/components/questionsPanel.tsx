@@ -7,7 +7,6 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel"
-import { Card } from "@/components/ui/card"
 import { useEffect, useState } from "react"
 import { ScrollArea } from "@radix-ui/react-scroll-area"
 
@@ -15,7 +14,6 @@ import { ScrollArea } from "@radix-ui/react-scroll-area"
 
 export default function QuestionsPanel({ testData, currentQuestionIndex, setCurrentQuestionIndex }: { testData: any, currentQuestionIndex: any, setCurrentQuestionIndex: any }) {
   const [api, setApi] = useState<CarouselApi>()
-  console.log(testData)
   useEffect(() => {
     if (!api) {
       return
