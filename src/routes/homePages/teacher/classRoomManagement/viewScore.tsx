@@ -6,6 +6,12 @@ import PopulateSheet from "./populateSheet";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import BackButton from "@/components/backButton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 
 
@@ -54,7 +60,10 @@ interface answerSubmission {
   questionNumber: number
   score: number
   AIVerdict: boolean
+  AIVerdictFailReason: string
   AIVerified: boolean
+  AIVivaTaken: boolean
+  AIVivaScore: number
   studentsCode: string
 }
 
@@ -223,6 +232,7 @@ export default function ViewScore() {
                     <Fragment key={index}>
                       <TableHead className="font-mono">Question {index}</TableHead>
                       <TableHead className="font-mono">Question {index} AI Verify</TableHead>
+                      <TableHead className="font-mono">Question {index} AI Viva Score</TableHead>
                       <TableHead className="font-mono">Question {index} Student's Code</TableHead>
                     </Fragment>
                   ))
@@ -248,10 +258,35 @@ export default function ViewScore() {
                               answer.AIVerdict ? (
                                 <TableCell className="font-mono text-green-500" >Verified Genuine</TableCell>
                               ) : (
-                                <TableCell className="font-mono text-red-500" >Check Student's Code!</TableCell>
+                                <TableCell className="font-mono text-red-500" >
+                                  Check Student's Code!
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <span className="text-blue-400"> Why?</span>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        <p>{answer.AIVerdictFailReason}</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
+                                </TableCell>
                               )
                             ) : (
                               <TableCell className="font-mono" >Not Verified</TableCell>
+                            )
+                          }
+
+
+                          {
+                            answer != null && answer.AIVivaTaken ? (
+                              answer.AIVivaScore > 2 ? (
+                                <TableCell className="font-mono text-green-500" >{answer.AIVivaScore}/4</TableCell>
+                              ) : (
+                                <TableCell className="font-mono text-red-500" >{answer.AIVivaScore}/4</TableCell>
+                              )
+                            ) : (
+                              <TableCell className="font-mono" >Not Taken</TableCell>
                             )
                           }
 
@@ -293,8 +328,8 @@ export default function ViewScore() {
                 </TableHeader>
 
                 <TableBody>
-                  {scores?.blacklistedStudents.map((student: student) => (
-                    <TableRow>
+                  {scores?.blacklistedStudents.map((student: student, index: number) => (
+                    <TableRow key={index}>
                       <TableCell>{student.universityID}</TableCell>
                       <TableCell>{student.name}</TableCell>
                       <TableCell><Button onClick={() => excuseStudent(student.ID)}>Excuse</Button></TableCell>

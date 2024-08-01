@@ -400,7 +400,7 @@ export default function NewAssignmentPage() {
       <div className="flex justify-between">
         <div className="flex items-center justify-center mb-5">
           <BackButton />
-          <h1 className="text-3xl font-bold ml-3">Create Test</h1>
+          <h1 className="text-3xl font-bold ml-3">Create Assignment</h1>
         </div>
         <Button variant="outline" onClick={() => fileUploadRef.current.click()}>
           <input type="file" accept=".json" onChange={handleFileUpload} className="hidden" ref={fileUploadRef}>
@@ -560,7 +560,7 @@ export default function NewAssignmentPage() {
               </Button>
             </div>
             <div className="mb-4">
-              <h3 className="text-lg font-bold mb-4">Test Cases</h3>
+              <h3 className="text-lg font-bold mb-4">Hidden Test Cases</h3>
               {question.testCases.map((testCase, testIndex) => (
                 <div key={testIndex} className="mb-4">
                   <div className="grid grid-cols-2 gap-4">

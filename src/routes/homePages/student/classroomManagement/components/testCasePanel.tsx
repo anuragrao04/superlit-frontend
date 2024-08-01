@@ -14,7 +14,7 @@ import { useAuth } from "@/lib/authContext"
 import { useNavigate } from "react-router-dom"
 
 
-export default function AssignmentTestCasePanel({ assignmentData, setAssignmentData, currentQuestionIndex, editorData, assignmentID, languages }: { assignmentData: any, setAssignmentData: any, editorData: any, currentQuestionIndex: any, assignmentID: number, languages: string[] }) {
+export default function AssignmentTestCasePanel({ assignmentData, setAssignmentData, currentQuestionIndex, editorData, assignmentID, languages, AIVivaTriggerRef }: { assignmentData: any, setAssignmentData: any, editorData: any, currentQuestionIndex: any, assignmentID: number, languages: string[], AIVivaTriggerRef: RefObject<HTMLElement> }) {
   const dialogRef = useRef(null)
   const [dialog, setDialog] = useState({})
   const { token } = useAuth()
@@ -143,11 +143,22 @@ export default function AssignmentTestCasePanel({ assignmentData, setAssignmentD
       return
     }
 
+    let numberTestCasesPassed, numberTotalTestCases = 0
+    if (responseJSON.testCasesFailed != null) {
+      numberTotalTestCases += responseJSON.testCasesFailed.length
+    }
+    if (responseJSON.testCasesPassed != null) {
+      numberTestCasesPassed = responseJSON.testCasesPassed.length
+      numberTotalTestCases += numberTestCasesPassed
+    }
+
     setDialog({
       title: "Success",
-      description: "Your code has been submitted successfully. You scored " + responseJSON.score + " points on this question. Submit the other questions if you haven't already. When you're done, you can close this tab",
+      description: `Your code has been submitted successfully. You scored ${responseJSON.score} points on this question while passing ${numberTestCasesPassed} out of ${numberTotalTestCases} test cases. Submit the other questions if you haven't already.`,
     })
     dialogRef.current.click()
+
+    AIVivaTriggerRef.current.click()
   }
 
   const outputRef = useRef(null)

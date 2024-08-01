@@ -26,6 +26,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/lib/authContext";
 import { useTheme } from "@/components/theme-provider";
+import AIViva from "./components/AIViva";
 
 loader.config({
   monaco,
@@ -48,6 +49,7 @@ export default function AttemptAssignment() {
   const [editorData, setEditorData] = useState([])
   let cheatingCount: number
   const dialogRef = useRef(null)
+  const AIVivaTriggerRef = useRef(null)
   const editorRef = useRef(null)
   const [dialog, setDialog] = useState({
   })
@@ -271,7 +273,7 @@ export default function AttemptAssignment() {
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={25}>
-              <AssignmentTestCasePanel assignmentData={assignmentData} setAssignmentData={setAssignmentData} currentQuestionIndex={currentQuestionIndex} editorData={editorData} languages={currentLanguage} assignmentID={parseInt(assignmentID)} />
+              <AssignmentTestCasePanel assignmentData={assignmentData} setAssignmentData={setAssignmentData} currentQuestionIndex={currentQuestionIndex} editorData={editorData} languages={currentLanguage} assignmentID={parseInt(assignmentID)} AIVivaTriggerRef={AIVivaTriggerRef} />
             </ResizablePanel>
           </ResizablePanelGroup>
         </ResizablePanel>
@@ -281,6 +283,8 @@ export default function AttemptAssignment() {
       {/* alert dialog */}
       <AlertDialogWrapper dialog={dialog} dialogRef={dialogRef} />
 
+      {/* AI VIVA */}
+      <AIViva triggerRef={AIVivaTriggerRef} code={editorData[currentQuestionIndex]} questionID={parseInt(assignmentData.questions[currentQuestionIndex].ID)} assignmentID={parseInt(assignmentID)} setDialog={setDialog} dialogRef={dialogRef} />
 
     </div>
 

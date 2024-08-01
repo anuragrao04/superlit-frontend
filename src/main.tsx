@@ -21,6 +21,7 @@ import EditAssignmentPage from "./routes/homePages/teacher/classRoomManagement/e
 import ViewScoreStudent from "./routes/homePages/student/classroomManagement/components/viewScoreStudent.tsx";
 import EnterUniIDForgotPassword from "./routes/forgotPassword/enterUniID.tsx";
 import ResetPassword from "./routes/forgotPassword/resetPassword.tsx";
+import AIViva from "./routes/homePages/student/classroomManagement/components/AIViva.tsx";
 
 const router = createBrowserRouter([
   {
@@ -98,6 +99,8 @@ const router = createBrowserRouter([
     path: "/home/student/classroom/:classroomCode/assignment/:assignmentID/scores",
     element: <ViewScoreStudent />
   },
+
+
   // 404 path
   {
     path: "*",
