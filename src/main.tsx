@@ -22,6 +22,7 @@ import ViewScoreStudent from "./routes/homePages/student/classroomManagement/com
 import EnterUniIDForgotPassword from "./routes/forgotPassword/enterUniID.tsx";
 import ResetPassword from "./routes/forgotPassword/resetPassword.tsx";
 import AIViva from "./routes/homePages/student/classroomManagement/components/AIViva.tsx";
+import TeacherSignUp from "./routes/teacherSignUp/teacherSignUp.tsx";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,13 @@ const router = createBrowserRouter([
   {
     path: "/resetpassword/:jwtToken",
     element: <ResetPassword />
+  },
+
+  // teacher sign up (hidden)
+
+  {
+    path: "/signup/teacher",
+    element: <TeacherSignUp />
   },
 
 
