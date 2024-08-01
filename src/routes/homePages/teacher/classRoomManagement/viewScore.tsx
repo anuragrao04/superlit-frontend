@@ -263,7 +263,7 @@ export default function ViewScore() {
                                   <TooltipProvider>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
-                                        <span className="text-blue-400"> Why?</span>
+                                        <span className="text-blue-400 cursor-pointer"> Why?</span>
                                       </TooltipTrigger>
                                       <TooltipContent>
                                         <p>{answer.AIVerdictFailReason}</p>

@@ -4,7 +4,12 @@ import CodeBlock from "@/components/ui/codeBlock";
 import { useAuth } from "@/lib/authContext";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 interface testCase {
   passed: boolean
@@ -17,6 +22,9 @@ interface Answer {
   code: string
   AIVerified: boolean
   AIVerdict: boolean
+  AIVerdictFailReason: string
+  AIVivaTaken: boolean
+  AIVivaScore: number
   score: number
   testCases: testCase[]
 }
@@ -121,7 +129,7 @@ export default function ViewScoreStudent() {
           <div key={index} className="shadow-sm bg-gray-200 dark:bg-gray-800 p-5 rounded-md my-5">
             <div className="flex justify-between items-center">
               <div className="text-2xl pb-2 font-bold">{submission.questionNumber + ". " + submission.questionTitle}</div>
-              <div className="flex space-x-2">
+              <div className="flex space-x-2 items-center justify-center">
                 {submission.AIVerified ?
                   submission.AIVerdict ? (
                     <div className="bg-green-500 text-green-50 px-2 py-1 rounded-md text-sm font-medium">
@@ -130,6 +138,16 @@ export default function ViewScoreStudent() {
                   ) : (
                     <div className="bg-red-500 text-red-50 px-2 py-1 rounded-md text-sm font-medium">
                       AI Verified - Incorrect
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span className="text-blue-300 cursor-pointer"> | Why?</span>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>{submission.AIVerdictFailReason}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </div>
                   )
                   : (
@@ -138,7 +156,14 @@ export default function ViewScoreStudent() {
                     </div>
                   )}
 
-                <div className="text-2xl font-bold">{submission.score}</div>
+                <div className="text-2xl font-bold flex flex-col">
+                  <div>{submission.score}</div>
+                  <div className={submission.AIVivaScore > 2 ? "text-green-500" : "text-red-500"}>{submission.AIVivaTaken ? (
+                    "Viva: " + submission.AIVivaScore + "/4"
+                  ) : (
+                    <></>
+                  )}</div>
+                </div>
 
               </div>
             </div>
