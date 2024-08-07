@@ -4,6 +4,7 @@ import { CardContent, CardFooter, Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useState, useRef } from "react"
 import AlertDialogWrapper from "./ui/alertDialogWrapper"
+import { useNavigate } from "react-router-dom"
 
 export default function SignUpForm() {
 
@@ -17,11 +18,13 @@ export default function SignUpForm() {
   })
   const [dialog, setDialog] = useState({
     title: "",
-    description: "",
+    description: ""
   })
 
   const emailRef = useRef(null)
   const dialogRef = useRef(null)
+
+  const navigate = useNavigate()
 
   const handleChange = (e: any) => {
     const { name, value, type, checked } = e.target;
@@ -84,7 +87,8 @@ export default function SignUpForm() {
     } else {
       setDialog({
         title: "Success",
-        description: responseJson.message
+        description: responseJson.message,
+        onOk: () => navigate("/")
       })
     }
     dialogRef.current.click()
@@ -207,6 +211,8 @@ export function SignUpFormTeacher() {
   const emailRef = useRef(null)
   const dialogRef = useRef(null)
 
+  const navigate = useNavigate()
+
   const handleChange = (e: any) => {
     const { name, value, type, checked } = e.target;
     setFormData(prevState => ({
@@ -268,10 +274,12 @@ export function SignUpFormTeacher() {
     } else {
       setDialog({
         title: "Success",
-        description: responseJson.message
+        description: responseJson.message,
+        onOk: () => navigate("/")
       })
     }
     dialogRef.current.click()
+
 
   }
 

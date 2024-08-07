@@ -90,6 +90,7 @@ export default function StudentClassroomManagement() {
                             <Button onClick={() => {
                               if (!onTime) return
                               navigate(`/home/student/classroom/${classroomCode}/assignment/${assignment.ID}/attempt`)
+                              document.body.requestFullscreen()
                             }}
                               variant={onTime ? "default" : "ghost"}
                               className={!onTime ? "cursor-no-drop" : ""}

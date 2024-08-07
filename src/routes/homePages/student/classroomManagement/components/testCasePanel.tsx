@@ -185,7 +185,7 @@ export default function AssignmentTestCasePanel({ assignmentData, setAssignmentD
                       End Test
                     </Button>
                     <Button className="mx-2" variant="default" onClick={getHint}>
-                      AI Hint
+                      AI Hint & Verify
                     </Button>
                     <Button className="mx-2" variant="secondary" onClick={handleRun}>
                       Run

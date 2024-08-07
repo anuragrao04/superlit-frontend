@@ -567,7 +567,7 @@ export default function EditAssignmentPage() {
                 ))
               }
               <button type="button" onClick={() => addConstraint(index)} className="ai-btn">
-                Add Constraint
+                + Add Constraint
               </button>
             </div>
 
@@ -618,7 +618,7 @@ export default function EditAssignmentPage() {
                 </div>
               ))}
               <Button type="button" onClick={() => addExampleCase(index)} className="mb-4">
-                Add Example Case
+                + Add Example Case
               </Button>
             </div>
             <div className="mb-4">
@@ -659,14 +659,14 @@ export default function EditAssignmentPage() {
                 </div>
               ))}
               <Button type="button" onClick={() => addTestCase(index)} className="mb-4">
-                Add Test Case
+                + Add Test Case
               </Button>
             </div>
           </div>
         ))}
 
         <Button type="button" onClick={addQuestion} className="">
-          Add Question
+          + Add Question
         </Button>
         <div className="mt-8 flex flex-col justify-start items-start space-y-3">
           <Button type="submit">Submit</Button>
