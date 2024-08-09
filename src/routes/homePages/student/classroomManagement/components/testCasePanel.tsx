@@ -106,10 +106,10 @@ export default function AssignmentTestCasePanel({ assignmentData, setAssignmentD
     // add other logic in the future
     setDialog({
       title: "Are you sure?",
-      description: "You will not be able to submit your code after this. Are you sure you want to end the test?",
+      description: "Are you sure you want to end the test? You can attempt again later BEFORE the deadline. You won't be able to attempt the test after the deadline",
       okText: "No, Go Back",
       cancelText: "Yes, End Test",
-      onCancel: () => { navigate(-1) }
+      onCancel: () => { navigate(-1); document.exitFullscreen() },
     })
     dialogRef.current.click()
   }
