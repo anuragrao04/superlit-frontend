@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import ClassroomCard, { JoinClassroomCard } from "./../components/classroomCard"
 import { useAuth } from "@/lib/authContext"
 import AlertDialogWrapper from "@/components/ui/alertDialogWrapper"
+import BottomBar from "@/components/bottomBar.tsx"
 
 
 export default function StudentHomePage() {
@@ -64,7 +65,7 @@ export default function StudentHomePage() {
 
 
 
-      <div className="h-[95vh] flex justify-center items-center bg-gray-100 dark:bg-gray-900">
+      <div className="h-[92vh] flex justify-center items-center bg-gray-100 dark:bg-gray-900">
         <div className="grid" style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
@@ -82,6 +83,8 @@ export default function StudentHomePage() {
 
         </div>
       </div>
+
+      <BottomBar />
 
       <AlertDialogWrapper dialog={dialog} dialogRef={dialogRef} />
 

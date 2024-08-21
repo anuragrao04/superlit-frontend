@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import ClassroomCard, { CreateClassroomCard, JoinClassroomCard } from "./../components/classroomCard"
 import { useAuth } from "@/lib/authContext"
 import AlertDialogWrapper from "@/components/ui/alertDialogWrapper"
-
+import BottomBar from "@/components/bottomBar.tsx"
 
 export default function TeacherHomePage() {
   const navigate = useNavigate()
@@ -62,7 +62,7 @@ export default function TeacherHomePage() {
 
 
 
-      <div className="h-[95vh] flex flex-col justify-between items-center p-5 bg-gray-100 dark:bg-gray-900">
+      <div className="h-[92vh] flex flex-col justify-between items-center p-5 bg-gray-100 dark:bg-gray-900">
         <div className="grid" style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
@@ -95,7 +95,7 @@ export default function TeacherHomePage() {
 
         </div>
       </div>
-
+      <BottomBar />
       <AlertDialogWrapper dialog={dialog} dialogRef={dialogRef} />
 
     </div >
