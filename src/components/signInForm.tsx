@@ -7,6 +7,7 @@ import AlertDialogWrapper from "./ui/alertDialogWrapper"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "@/lib/authContext"
 import { Link } from "react-router-dom"
+import { Separator } from "./ui/separator"
 
 export default function SignInForm() {
   const navigate = useNavigate()
@@ -127,7 +128,32 @@ export default function SignInForm() {
               Sign In
             </Button>
           </CardFooter>
+
+
+          <div className="mx-5">
+            <h3 className="text-sm font-medium text-center">Confused Where To Start?</h3>
+            <Separator className="my-1" />
+            <div className="flex items-center justify-around">
+              <a
+                href="teachers-manual.pdf"
+                target="_blank"
+                className="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+              >
+                Teacher Manual
+              </a>
+              <Separator orientation="vertical" className="h-4" />
+              <a
+                href="students-manual.pdf"
+                target="_blank"
+                className="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+              >
+                Student Manual
+              </a>
+            </div>
+          </div>
         </Card>
+
+
 
         {/* alert dialog */}
         <AlertDialogWrapper dialog={dialog} dialogRef={dialogRef} />
