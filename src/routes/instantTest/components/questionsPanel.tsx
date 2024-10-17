@@ -42,7 +42,7 @@ export default function QuestionsPanel({ testData, currentQuestionIndex, setCurr
                   <div className="text-4xl">
                     {question.title}
                   </div>
-                  <div>
+                  <div className="whitespace-pre-wrap break-words">
                     {question.question}
                   </div>
 

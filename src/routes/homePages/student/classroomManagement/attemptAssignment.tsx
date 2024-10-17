@@ -59,6 +59,50 @@ export default function AttemptAssignment() {
   const navigate = useNavigate()
 
 
+  function scheduleEndActions(endTimeString: string) {
+    const endTime = new Date(endTimeString);
+    const fiveMinutesInMillis = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+    // Function to execute when the end time is reached
+    function executeEndTimeAction() {
+      setDialog({
+        "title": "Time's up!",
+        "description": "The Assignment Time Is Over, You will no longer be able to make submissions"
+      })
+      dialogRef.current.click()
+    }
+
+    // Function to execute 5 minutes before the end time
+    function executeFiveMinuteWarning() {
+      setDialog({
+        "title": "5 Minutes Left",
+        "description": "5 Minutes are left for the assignment to end. Please make sure you have submitted all your answers. You will not be able to make any submissions after the end time. All questions are NOT auto submitted at the end time. Please submit all questions as soon as possible"
+      })
+      dialogRef.current.click()
+    }
+
+    // Calculate initial delays
+    const now = new Date();
+    const timeUntilEnd = endTime.getTime() - now.getTime();
+    const fiveMinuteWarningDelay = timeUntilEnd - fiveMinutesInMillis;
+
+    // Check if the end time or 5-minute warning is in the future
+    if (timeUntilEnd > 0) {
+      // Schedule end time action
+      setTimeout(() => {
+        executeEndTimeAction();
+      }, timeUntilEnd);
+
+      // Schedule 5-minute warning (only if it's more than 5 minutes in the future)
+      if (fiveMinuteWarningDelay > 0) {
+        setTimeout(() => {
+          executeFiveMinuteWarning();
+        }, fiveMinuteWarningDelay);
+      }
+    } else {
+      console.log("End time has already passed.");
+    }
+  }
 
   async function fetchAssignmentData() {
     const response = await fetch("/api/assignment/get", {
@@ -106,6 +150,7 @@ export default function AttemptAssignment() {
     }
 
     setAssignmentData(responseJSON)
+    scheduleEndActions(responseJSON.endTime)
 
     const tempEditorData = responseJSON.questions.map((question: any) => {
       const storedEditorData = localStorage.getItem(`question${question.ID}-${token.toString()}`)
@@ -153,6 +198,24 @@ export default function AttemptAssignment() {
       dialogRef.current.click()
     };
 
+    const handleResize = () => {
+
+      if (!document.fullscreenElement) {
+        console.log("resized and not full screen")
+        setDialog({
+          title: "No cheating!",
+          description: `You are not allowed to cheat. Kindly stay on the full screen view. You are now being redirected out of the assignment. Click on the 'attempt' button again and you'll be back on the assignment screen. If you think this is a mistake, please contact your teacher.`,
+          onOk: () => navigate(-1)
+        })
+        dialogRef.current.click()
+        setTimeout(() => {
+          navigate(-1)
+          // exit from full screen
+          document.exitFullscreen()
+        }, 15000)
+      }
+
+    }
 
 
     const handleCheater = () => {
@@ -172,12 +235,22 @@ export default function AttemptAssignment() {
 
         setDialog({
           title: "You have been disqualified",
-          description: "You have been disqualified from the test for cheating. Please contact your teacher if you think this is a mistake.",
+          description: "You have been disqualified from the test for cheating. Please contact your teacher if you think this is a mistake. You will be navigated out of the assignment in 10 seconds",
           onOk: () => navigate("/")
         })
+
+
+        setTimeout(() => {
+          navigate("/")
+          // exit from full screen
+          document.exitFullscreen()
+        }, 10000)
+
+
         dialogRef.current.click()
         return
       }
+
 
       cheatingCount += 1
       localStorage.setItem(`${assignmentID}-cheatingCount`, cheatingCount)
@@ -194,9 +267,13 @@ export default function AttemptAssignment() {
     window.addEventListener('blur', handleCheater);
 
 
+    window.addEventListener('resize', handleResize)
+
+
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       window.removeEventListener('blur', handleCheater);
+      window.removeEventListener('blur', handleResize);
     };
   }, []);
 
@@ -252,8 +329,35 @@ export default function AttemptAssignment() {
                   onChange={(value: any) => {
                     const prevValue: string = editorData[currentQuestionIndex]
                     const delta = value.length - prevValue.length
+
                     console.log(value.length, prevValue.length, delta)
-                    if (delta > 100) {
+
+                    function longestCommonSubsequence(str1: any, str2: any) {
+                      const m = str1.length;
+                      const n = str2.length;
+                      const dp = Array(m + 1)
+                        .fill(null)
+                        .map(() => Array(n + 1).fill(0));
+
+                      for (let i = 1; i <= m; i++) {
+                        for (let j = 1; j <= n; j++) {
+                          if (str1[i - 1] === str2[j - 1]) {
+                            dp[i][j] = dp[i - 1][j - 1] + 1;
+                          } else {
+                            dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                          }
+                        }
+                      }
+
+                      return dp[m][n];
+                    }
+
+                    const lcsLength = longestCommonSubsequence(prevValue, value);
+                    const allNewCharsFromOriginal = delta === (value.length - lcsLength);
+
+
+
+                    if (delta > 100 && !allNewCharsFromOriginal) {
                       setDialog({
                         title: "Copy Pastes",
                         description: "Large copy pastes are not allowed.",

@@ -134,7 +134,28 @@ export default function AssignmentTestCasePanel({ assignmentData, setAssignmentD
 
 
     const responseJSON = await response.json()
-    if (responseJSON.error || !response.ok) {
+
+    if (!response.ok) {
+      setDialog({
+        title: "Error",
+        description: "An error occured: " + responseJSON.error,
+      })
+      dialogRef.current.click()
+      return
+    }
+
+    if (responseJSON.error) {
+
+      if (responseJSON.error = "Assignment is not active") {
+        setDialog({
+          title: "Times Up",
+          description: "You can't make this submission since it's past the deadline. Contact your teacher if you think this is an error"
+        })
+        dialogRef.current.click()
+        return
+      }
+
+
       setDialog({
         title: "Error",
         description: "An error occured: " + responseJSON.error,

@@ -55,6 +55,30 @@ export default function AIViva({ triggerRef, code, questionID, assignmentID, set
     }
 
     setQuestions(responseJSON.questions)
+
+
+    // setQuestions([
+    //   {
+    //     question: "in non consequat esse aliquip incididunt voluptate mollit et in duis mollit magna eu dolor esse duis consequat deserunt mollit do irure adipisicing labore amet incididunt ad et elit eiusmod exercitation ut adipisicing enim veniam incididunt deserunt ad consequat commodo labore duis fugiat occaecat eiusmod ut culpa consequat ad culpa",
+    //     options: ["1", "2", "3", "4"],
+    //     correctOption: 0
+    //   },
+    //   {
+    //     question: "in non consequat esse aliquip incididunt voluptate mollit et in duis mollit magna eu dolor esse duis consequat deserunt mollit do irure adipisicing labore amet incididunt ad et elit eiusmod exercitation ut adipisicing enim veniam incididunt deserunt ad consequat commodo labore duis fugiat occaecat eiusmod ut culpa consequat ad culpa",
+    //     options: ["1", "2", "3", "4"],
+    //     correctOption: 0
+    //   },
+    //   {
+    //     question: "in non consequat esse aliquip incididunt voluptate mollit et in duis mollit magna eu dolor esse duis consequat deserunt mollit do irure adipisicing labore amet incididunt ad et elit eiusmod exercitation ut adipisicing enim veniam incididunt deserunt ad consequat commodo labore duis fugiat occaecat eiusmod ut culpa consequat ad culpa",
+    //     options: ["1", "2", "3", "4"],
+    //     correctOption: 0
+    //   },
+    //   {
+    //     question: "in non consequat esse aliquip incididunt voluptate mollit et in duis mollit magna eu dolor esse duis consequat deserunt mollit do irure adipisicing labore amet incididunt ad et elit eiusmod exercitation ut adipisicing enim veniam incididunt deserunt ad consequat commodo labore duis fugiat occaecat eiusmod ut culpa consequat ad culpa",
+    //     options: ["1", "2", "3", "4"],
+    //     correctOption: 0
+    //   },
+    // ])
   }
 
   useEffect(() => {
@@ -163,36 +187,34 @@ export default function AIViva({ triggerRef, code, questionID, assignmentID, set
             Answer the following questions to test your knowledge
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <ScrollArea>
-          <div className="flex flex-col items-center justify-center">
-            <div className="space-y-4 my-5">
-              {
+        <div className="flex flex-col items-center justify-center overflow-scroll max-h-[70vh]">
+          <div className="space-y-4 my-5">
+            {
 
-                questions == null ? (<div>loading...</div>) : (
-                  questions.map((question, index) => (
-                    <div key={index} className="space-y-2">
-                      <p className="text-card-foreground">{question.question}</p>
-                      <div className="grid grid-cols-2 gap-2">
-                        {question.options.map((option, optionIndex) => (
-                          <button
-                            key={optionIndex}
-                            className={`bg-muted px-4 py-2 rounded-md transition-colors ${selectedOptions[index] == optionIndex ? "bg-primary text-primary-foreground dark:hover:text-black hover:text-white" : "hover:bg-muted/80"
-                              }`}
-                            onClick={() => handleOptionSelect(index, optionIndex)}
-                          >
-                            {option}
-                          </button>
-                        ))}
-                      </div>
+              questions == null ? (<div>loading...</div>) : (
+                questions.map((question, index) => (
+                  <div key={index} className="space-y-2">
+                    <p className="text-card-foreground">{question.question}</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {question.options.map((option, optionIndex) => (
+                        <button
+                          key={optionIndex}
+                          className={`bg-muted px-4 py-2 rounded-md transition-colors ${selectedOptions[index] == optionIndex ? "bg-primary text-primary-foreground dark:hover:text-black hover:text-white" : "hover:bg-muted/80"
+                            }`}
+                          onClick={() => handleOptionSelect(index, optionIndex)}
+                        >
+                          {option}
+                        </button>
+                      ))}
                     </div>
-                  )))}
-            </div>
-            <Button className="w-full" onClick={handleSubmit}>
-              Submit
-            </Button>
-            <AlertDialogAction className="absolute h-0 w-0 -top-96 -left-96 p-0" ref={closeVivaRef}></AlertDialogAction>
+                  </div>
+                )))}
           </div>
-        </ScrollArea>
+          <Button className="w-full" onClick={handleSubmit}>
+            Submit
+          </Button>
+          <AlertDialogAction className="absolute h-0 w-0 -top-96 -left-96 p-0" ref={closeVivaRef}></AlertDialogAction>
+        </div>
       </AlertDialogContent>
     </AlertDialog>
   )
