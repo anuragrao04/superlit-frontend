@@ -265,15 +265,13 @@ export default function AttemptAssignment() {
 
     window.addEventListener('beforeunload', handleBeforeUnload);
     window.addEventListener('blur', handleCheater);
-
-
     window.addEventListener('resize', handleResize)
 
 
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       window.removeEventListener('blur', handleCheater);
-      window.removeEventListener('blur', handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -330,34 +328,7 @@ export default function AttemptAssignment() {
                     const prevValue: string = editorData[currentQuestionIndex]
                     const delta = value.length - prevValue.length
 
-                    console.log(value.length, prevValue.length, delta)
-
-                    function longestCommonSubsequence(str1: any, str2: any) {
-                      const m = str1.length;
-                      const n = str2.length;
-                      const dp = Array(m + 1)
-                        .fill(null)
-                        .map(() => Array(n + 1).fill(0));
-
-                      for (let i = 1; i <= m; i++) {
-                        for (let j = 1; j <= n; j++) {
-                          if (str1[i - 1] === str2[j - 1]) {
-                            dp[i][j] = dp[i - 1][j - 1] + 1;
-                          } else {
-                            dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
-                          }
-                        }
-                      }
-
-                      return dp[m][n];
-                    }
-
-                    const lcsLength = longestCommonSubsequence(prevValue, value);
-                    const allNewCharsFromOriginal = delta === (value.length - lcsLength);
-
-
-
-                    if (delta > 100 && !allNewCharsFromOriginal) {
+                    if (delta > 100) {
                       setDialog({
                         title: "Copy Pastes",
                         description: "Large copy pastes are not allowed.",
