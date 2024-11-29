@@ -64,3 +64,14 @@ npm run dev
 ```
 
 - You should find the website running on `http://localhost:5173`
+
+
+## Future
+
+Here are the features planned to be implemented in the future: 
+
+1. The teacher must be able to access a list of students who are in the classroom but did not submit a particular assignment
+2. Massive UI improvement as the current version is just shadcn components with only the core parts of superlit implemented presentably
+3. Optimize for mobile devices (especially the screen for writing code)
+4. Better focus steal prevention
+5. Feel free to raise issues of your own :)
