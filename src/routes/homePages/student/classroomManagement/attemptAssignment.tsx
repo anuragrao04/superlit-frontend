@@ -1,4 +1,3 @@
-
 import Editor, { MonacoDiffEditor, loader } from "@monaco-editor/react";
 import * as monaco from "monaco-editor";
 import SuperlitLogo from "@/components/superlitLogo";
@@ -148,7 +147,6 @@ export default function AttemptAssignment() {
       dialogRef.current.click()
       return
     }
-
     setAssignmentData(responseJSON)
     scheduleEndActions(responseJSON.endTime)
 
@@ -176,7 +174,6 @@ export default function AttemptAssignment() {
     if (token == null) {
       navigate("/")
     }
-    cheatingCount = parseInt(localStorage.getItem(`${assignmentID}-cheatingCount`)) || 0
     fetchAssignmentData()
   }, [])
 
@@ -219,7 +216,9 @@ export default function AttemptAssignment() {
 
 
     const handleCheater = () => {
-      if (cheatingCount >= 1) {
+      console.log(assignmentData.maxWindowChangeAttempts)
+      cheatingCount = parseInt(localStorage.getItem(`${assignmentID}-cheatingCount`)) || 0
+      if (cheatingCount >= assignmentData.maxWindowChangeAttempts) {
         localStorage.removeItem(`${assignmentID}-cheatingCount`)
 
         fetch("/api/assignment/addstudenttoblacklist", {
@@ -256,10 +255,9 @@ export default function AttemptAssignment() {
       localStorage.setItem(`${assignmentID}-cheatingCount`, cheatingCount)
       setDialog({
         title: "No cheating!",
-        description: `You are not allowed to cheat. Please stay on the test page. If you leave, your test will be submitted and you will get 0 points. You have ${1 - cheatingCount} chance(s) left. If you think this is a mistake, please contact your teacher.`,
+        description: `You are not allowed to cheat. Please stay on the test page. If you leave, your test will be submitted and you will get 0 points. You have ${assignmentData.maxWindowChangeAttempts - cheatingCount} chance(s) left. If you think this is a mistake, please contact your teacher.`,
       })
       dialogRef.current.click()
-
     }
 
 
@@ -273,7 +271,7 @@ export default function AttemptAssignment() {
       window.removeEventListener('blur', handleCheater);
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [assignmentData]);
 
 
 
