@@ -178,8 +178,9 @@ export default function AssignmentTestCasePanel({ assignmentData, setAssignmentD
       description: `Your code has been submitted successfully. You scored ${responseJSON.score} points on this question while passing ${numberTestCasesPassed} out of ${numberTotalTestCases} test cases. Submit the other questions if you haven't already.`,
     })
     dialogRef.current.click()
-
-    AIVivaTriggerRef.current.click()
+    if (assignmentData.enableAIViva) {
+      AIVivaTriggerRef.current.click()
+    }
   }
 
   const outputRef = useRef(null)
@@ -205,9 +206,12 @@ export default function AssignmentTestCasePanel({ assignmentData, setAssignmentD
                     <Button className="mx-2" variant="destructive" onClick={handleEndTest}>
                       End Test
                     </Button>
-                    <Button className="mx-2" variant="default" onClick={getHint}>
-                      AI Hint & Verify
-                    </Button>
+                    {assignmentData.enableAIHint ? (
+                      <Button className="mx-2" variant="default" onClick={getHint}>
+                        AI Hint & Verify
+                      </Button>
+                    ) : <></>}
+
                     <Button className="mx-2" variant="secondary" onClick={handleRun}>
                       Run
                     </Button>
@@ -233,7 +237,7 @@ export default function AssignmentTestCasePanel({ assignmentData, setAssignmentD
 
                         <div className="w-full">
                           <div>Your Output</div>
-                          <Textarea ref={outputRef} value={testCase["userOutput"]} readOnly></Textarea>
+                          <Textarea ref={outputRef} value={testCase["userOutput"]} readOnly rows={20}></Textarea>
                         </div>
                       </TabsContent>
                     ))
