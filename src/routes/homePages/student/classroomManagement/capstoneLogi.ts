@@ -43,6 +43,7 @@ export async function logi(
   // If log count exceeds 150, force flush
   if (logBuffer.length > 150) {
     forceFlush();
+    logBuffer.length = 0;
   }
 }
 
