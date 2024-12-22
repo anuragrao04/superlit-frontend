@@ -52,7 +52,7 @@ export default function StudentClassroomManagement() {
 
   return (
     <div className="w-screen min-h-screen bg-gray-100 dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto py-10 px-6 space-y-6">
+      <div className="max-w-[80%] mx-auto py-10 px-6 space-y-6">
         <div className="flex items-center justify-between">
           <BackButton />
           <h1 className="text-3xl font-bold">{classroomData.name}</h1>
@@ -71,6 +71,7 @@ export default function StudentClassroomManagement() {
                     <TableHead className="font-mono">End Time</TableHead>
                     <TableHead className="font-mono">Attempt</TableHead>
                     <TableHead className="font-mono">View Your Score</TableHead>
+                    <TableHead className="font-mono">Leaderboard</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -79,6 +80,7 @@ export default function StudentClassroomManagement() {
                       const startTime = new Date(assignment.startTime)
                       const endTime = new Date(assignment.endTime)
                       const onTime = new Date() > startTime && new Date() < endTime
+                      const enableLeaderboard = assignment.enableLeaderboard
 
                       return (
                         <TableRow key={index}>
@@ -101,6 +103,15 @@ export default function StudentClassroomManagement() {
                             <Button onClick={() => {
                               navigate(`/home/student/classroom/${classroomCode}/assignment/${assignment.ID}/scores`)
                             }}>View Score</Button>
+                          </TableCell>
+                          <TableCell className="font-mono">
+                            <Button onClick={() => {
+                              if (!enableLeaderboard) return
+                              navigate(`/home/student/classroom/${classroomCode}/assignment/${assignment.ID}/leaderboard`)
+                            }}
+                              variant={enableLeaderboard ? "default" : "ghost"}
+                              className={!enableLeaderboard ? "cursor-no-drop" : ""}
+                            >View Leaderboard</Button>
                           </TableCell>
                         </TableRow>
                       )

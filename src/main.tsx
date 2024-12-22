@@ -23,6 +23,7 @@ import EnterUniIDForgotPassword from "./routes/forgotPassword/enterUniID.tsx";
 import ResetPassword from "./routes/forgotPassword/resetPassword.tsx";
 import AIViva from "./routes/homePages/student/classroomManagement/components/AIViva.tsx";
 import TeacherSignUp from "./routes/teacherSignUp/teacherSignUp.tsx";
+import ViewLeaderboard from "./routes/homePages/student/classroomManagement/viewLeaderboard.tsx";
 
 const router = createBrowserRouter([
   {
@@ -106,6 +107,10 @@ const router = createBrowserRouter([
   {
     path: "/home/student/classroom/:classroomCode/assignment/:assignmentID/scores",
     element: <ViewScoreStudent />
+  },
+  {
+    path: "/home/student/classroom/:classroomCode/assignment/:assignmentID/leaderboard",
+    element: <ViewLeaderboard />
   },
 
 

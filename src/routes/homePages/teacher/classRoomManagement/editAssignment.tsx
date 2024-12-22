@@ -113,6 +113,9 @@ export default function EditAssignmentPage() {
     description: "",
     startTime: "",
     endTime: "",
+    enableAIViva: true,
+    enableAIHint: true,
+    enableLeaderboard: false,
     classroomIDs: [],
     questions: [
       {
@@ -138,6 +141,7 @@ export default function EditAssignmentPage() {
         ],
       },
     ],
+    maxWindowChangeAttempts: 3,
   })
 
 
@@ -183,31 +187,6 @@ export default function EditAssignmentPage() {
       return {
         ...prevData,
         questions: updatedQuestions,
-      };
-    });
-  };
-
-
-  const handleClassroomSelect = (classroom: any) => {
-    setFormData((prevData) => {
-      let updatedIDs = prevData.classroomIDs;
-      updatedIDs.push(classroom.ID)
-      return {
-        ...prevData,
-        classroomIDs: updatedIDs,
-      };
-    });
-  };
-
-  const handleClassroomUnselect = (classroom: any) => {
-    setFormData((prevData) => {
-      let updatedIDs = prevData.classroomIDs;
-      updatedIDs = updatedIDs.filter(
-        (ID) => ID !== classroom.ID
-      );
-      return {
-        ...prevData,
-        classroomIDs: updatedIDs,
       };
     });
   };
@@ -413,6 +392,9 @@ export default function EditAssignmentPage() {
       })
     })
 
+    // convert maxWindowChangeAttempts to a Number type
+    formData.maxWindowChangeAttempts = Number(formData.maxWindowChangeAttempts)
+
     let isValid = validateTimes(formData.startTime, formData.endTime)
     if (!isValid) {
       setDialog({
@@ -498,6 +480,52 @@ export default function EditAssignmentPage() {
         <div className="mb-6">
           <Label htmlFor="endTime">End Time</Label>
           <Input type="datetime-local" id="endTime" name="endTime" value={formData.endTime} onChange={handleInputChange} required />
+        </div>
+        <div className="mb-6 space-y-4">
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="enableAIViva"
+              name="enableAIViva"
+              checked={formData.enableAIViva}
+              onChange={(e) => handleInputChange({ target: { name: 'enableAIViva', value: e.target.checked } })}
+            />
+            <Label htmlFor="enableAIViva">Enable AI Viva</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="enableAIHint"
+              name="enableAIHint"
+              checked={formData.enableAIHint}
+              onChange={(e) => handleInputChange({ target: { name: 'enableAIHint', value: e.target.checked } })}
+            />
+            <Label htmlFor="enableAIHint">Enable AI Hint</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="enableLeaderboard"
+              name="enableLeaderboard"
+              checked={formData.enableLeaderboard}
+              onChange={(e) => handleInputChange({ target: { name: 'enableLeaderboard', value: e.target.checked } })}
+            />
+            <Label htmlFor="enableLeaderboard">Enable Leaderboard</Label>
+          </div>
+        </div>
+
+
+        <div className="mb-6">
+          <Label htmlFor="maxWindowChangeAttempts">Max Window Change Attempts</Label>
+          <Input
+            type="number"
+            id="maxWindowChangeAttempts"
+            name="maxWindowChangeAttempts"
+            value={formData.maxWindowChangeAttempts}
+            onChange={handleInputChange}
+            min="1"
+            required
+          />
         </div>
 
         {formData.questions.map((question, index) => (
