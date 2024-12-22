@@ -1,8 +1,8 @@
 interface LogEntry {
   userID: string;
-  editorContentBefore: string;
-  editorContentAfter: string;
-  timestamp: number;
+  editorContentBefore: string | undefined;
+  editorContentAfter: string | undefined;
+  timestamp: string;
   isPaste: boolean;
   isDeletion: boolean;
   isCompilation: boolean;
@@ -14,14 +14,15 @@ const logBuffer: LogEntry[] = [];
 
 export async function logi(
   userID: string,
-  editorContentBefore: string,
-  editorContentAfter: string,
-  timestamp: number,
+  editorContentBefore: string | undefined,
+  editorContentAfter: string | undefined,
+  timestamp: number | string,
   isPaste: boolean,
   isDeletion: boolean,
   isCompilation: boolean,
   isSubmission: boolean,
 ) {
+  timestamp = String(timestamp);
   const newLogEntry: LogEntry = {
     userID,
     editorContentBefore,
@@ -36,8 +37,8 @@ export async function logi(
   // Push the new entry into our in-memory array
   logBuffer.push(newLogEntry);
 
-  // If log count exceeds 300, force flush
-  if (logBuffer.length > 300) {
+  // If log count exceeds 150, force flush
+  if (logBuffer.length > 150) {
     forceFlush();
   }
 }
@@ -48,7 +49,9 @@ export async function forceFlush() {
   fetch("/api/capstone-logi", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(logBuffer),
+    body: JSON.stringify({
+      logs: logBuffer,
+    }),
   })
     .then((res) => {
       if (!res.ok) {

@@ -26,6 +26,7 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/lib/authContext";
 import { useTheme } from "@/components/theme-provider";
 import AIViva from "./components/AIViva";
+import { logi, forceFlush } from "./capstoneLogi.ts";
 
 loader.config({
   monaco,
@@ -43,7 +44,7 @@ const languageToEditorLanguageMapping = {
 let isPaste = false;
 
 export default function AttemptAssignment() {
-  let { classroomCode, assignmentID } = useParams();
+  const { classroomCode, assignmentID } = useParams();
   const [assignmentData, setAssignmentData] = useState(null);
   const { token } = useAuth();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -54,6 +55,7 @@ export default function AttemptAssignment() {
   const editorRef = useRef(null);
   const [dialog, setDialog] = useState({});
   const [currentLanguage, setCurrentLanguage] = useState([]);
+  const [userID, setUserID] = useState(null);
 
   const themeInfo = useTheme();
   const navigate = useNavigate();
@@ -106,7 +108,7 @@ export default function AttemptAssignment() {
   }
 
   async function fetchAssignmentData() {
-    const response = await fetch("/api/assignment/get", {
+    let response = await fetch("/api/assignment/get", {
       method: "POST",
       headers: {
         content: "application/json",
@@ -169,6 +171,16 @@ export default function AttemptAssignment() {
         return question.languages[0];
       }),
     );
+
+    response = await fetch("/api/auth/getuser", {
+      method: "GET",
+      headers: {
+        Authorization: token.toString(),
+      },
+    });
+
+    responseJSON = await response.json();
+    setUserID(responseJSON.universityID);
   }
 
   const handleEditorDidMount = (editor: any, monaco: any) => {
@@ -342,7 +354,7 @@ export default function AttemptAssignment() {
                   onPaste={() => {
                     isPaste = true;
                   }}
-                  onChange={(value: any) => {
+                  onChange={(value: string | undefined) => {
                     const prevValue: string = editorData[currentQuestionIndex];
                     const delta = value.length - prevValue.length;
                     const isDeletion = delta < 0;
@@ -365,20 +377,17 @@ export default function AttemptAssignment() {
                     );
                     setEditorData([...tempEditorData]);
 
-                    const log = {
-                      userID: #TODO,
-                      editorContentBefore: prevValue,
-                      editorContentAfter: value,
-                      change: delta,
-                      timestamp: timestamp,
-                      isPaste: isPaste,
-                      isDeletion: isDeletion,
-                      isCompilation: false,
-                      isSubmission: false,
-                    };
-                    console.log(log);
-
-                    setIsPaste(false);
+                    logi(
+                      userID,
+                      prevValue,
+                      value,
+                      timestamp,
+                      isPaste,
+                      isDeletion,
+                      false,
+                      false,
+                    );
+                    isPaste = false;
                   }}
                   onMount={handleEditorDidMount}
                 />
@@ -394,6 +403,9 @@ export default function AttemptAssignment() {
                 languages={currentLanguage}
                 assignmentID={parseInt(assignmentID)}
                 AIVivaTriggerRef={AIVivaTriggerRef}
+                logi={logi}
+                forceFlush={forceFlush}
+                userID={userID}
               />
             </ResizablePanel>
           </ResizablePanelGroup>
