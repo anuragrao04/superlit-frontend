@@ -47,6 +47,7 @@ export default function AssignmentTestCasePanel({
   const handleRun = async () => {
     logi(
       userID,
+      currentQuestionIndex,
       editorData[currentQuestionIndex],
       editorData[currentQuestionIndex],
       Date.now(),
@@ -163,6 +164,7 @@ export default function AssignmentTestCasePanel({
   const handleSubmit = async () => {
     logi(
       userID,
+      currentQuestionIndex,
       editorData[currentQuestionIndex],
       editorData[currentQuestionIndex],
       Date.now(),

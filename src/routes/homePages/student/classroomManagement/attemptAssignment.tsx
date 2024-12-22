@@ -379,6 +379,7 @@ export default function AttemptAssignment() {
 
                     logi(
                       userID,
+                      currentQuestionIndex,
                       prevValue,
                       value,
                       timestamp,
