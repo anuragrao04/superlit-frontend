@@ -1,5 +1,6 @@
 interface LogEntry {
   userID: string;
+  currentQuestionIndex: number;
   editorContentBefore: string | undefined;
   editorContentAfter: string | undefined;
   timestamp: string;
@@ -14,6 +15,7 @@ const logBuffer: LogEntry[] = [];
 
 export async function logi(
   userID: string,
+  currentQuestionIndex: number,
   editorContentBefore: string | undefined,
   editorContentAfter: string | undefined,
   timestamp: number | string,
@@ -25,6 +27,7 @@ export async function logi(
   timestamp = String(timestamp);
   const newLogEntry: LogEntry = {
     userID,
+    currentQuestionIndex,
     editorContentBefore,
     editorContentAfter,
     timestamp,
