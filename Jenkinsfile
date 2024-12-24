@@ -3,12 +3,16 @@ pipeline {
 
     stages {
         stage('Build') {
-            steps {
-                echo 'Building..'
-                sh 'node -v'
-                sh 'npm i'
-                sh 'npm run build'
-            }
+        steps {
+                sh '''
+                export NVM_DIR="/home/pesurf/.nvm"
+                [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                nvm use 22
+                node -v
+                npm install
+                npm run build
+                '''
+        }
         }
         stage('Test') {
             steps {
