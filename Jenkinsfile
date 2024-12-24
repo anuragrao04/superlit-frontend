@@ -5,8 +5,8 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
-                npm i
-                npm run build
+                sh 'npm i'
+                sh 'npm run build'
             }
         }
         stage('Test') {
@@ -17,8 +17,8 @@ pipeline {
         stage('Deploy') {
             steps {
               echo 'Deploying....'
-              rm -rf /var/www/html/*
-              cp -r dist/* /var/www/html/
+              sh 'rm -rf /var/www/html/*'
+              sh 'cp -r dist/* /var/www/html/'
             }
         }
     }
