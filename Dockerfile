@@ -1,6 +1,6 @@
 # ---- Base Stage ----
 FROM node:20 AS base
-WORKDIR /superlit/frontend
+WORKDIR /superlit-frontend
 
 # Copy package files and install dependencies
 COPY package.json package-lock.json ./
