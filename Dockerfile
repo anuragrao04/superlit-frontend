@@ -1,21 +1,28 @@
-FROM node:18-alpine AS builder
+# ---- Base Stage ----
+FROM node:20 AS base
+WORKDIR /superlit/frontend
 
-WORKDIR /app
-
+# Copy package files and install dependencies
 COPY package.json package-lock.json ./
-
 RUN npm ci
 
+# Copy the entire frontend source code
 COPY . .
 
+EXPOSE 5173
+
+# ---- Development Stage ----
+FROM base AS dev
+CMD ["npm", "run", "dev", "--", "--host"]
+
+# ---- Build Stage ----
+FROM base AS build
 RUN npm run build
 
-FROM nginx:alpine
-
-COPY --from=builder /app/dist /usr/share/nginx/html
+# ---- Production Stage ----
+FROM nginx:alpine AS prod
+COPY --from=build /app/dist /usr/share/nginx/html
 
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
-
 EXPOSE 80
-
 CMD ["nginx", "-g", "daemon off;"]

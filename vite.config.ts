@@ -1,7 +1,7 @@
 import path from "path";
-import { defineConfig } from 'vite';
-import dotenv from 'dotenv';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vite";
+import dotenv from "dotenv";
+import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default ({ mode }: any) => {
@@ -15,13 +15,13 @@ export default ({ mode }: any) => {
     },
     server: {
       proxy: {
-        '/api': {
+        "/api": {
           target: process.env.BACKEND_URL,
           changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ""), // Remove the "/api" prefix
         },
       },
     },
   };
   return defineConfig(config);
 };
-
