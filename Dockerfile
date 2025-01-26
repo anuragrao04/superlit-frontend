@@ -9,10 +9,10 @@ RUN npm ci
 # Copy the entire frontend source code
 COPY . .
 
-EXPOSE 5173
 
 # ---- Development Stage ----
 FROM base AS dev
+EXPOSE 5173
 CMD ["npm", "run", "dev", "--", "--host"]
 
 # ---- Build Stage ----
